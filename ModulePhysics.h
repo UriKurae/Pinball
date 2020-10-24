@@ -50,7 +50,7 @@ public:
 	
 	bodyReturn* createCircle(float posX, float posY, float rad);
 	bodyReturn* createRectangle(float posX, float posY, float width, float height);
-	bodyReturn* createChains();
+	bodyReturn* createChain(int x, int y, int* arr, int num,const char type);
 
 private:
 

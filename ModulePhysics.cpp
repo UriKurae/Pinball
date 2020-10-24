@@ -81,91 +81,40 @@ bodyReturn* ModulePhysics::createRectangle(float posX, float posY, float width, 
 }
 
 //Create Chains
-bodyReturn* ModulePhysics::createChains()
+bodyReturn* ModulePhysics::createChain(int x, int y, int* arr, int num, const char type)
 {
-	
-	b2Vec2 vertices[49];
-	int points[98] =
-	{
-		43, 38,
-		43, 31,
-		43, 20,
-		42, 11,
-		42, 1,
-		50, 7,
-		56, 11,
-		64, 19,
-		68, 23,
-		75, 32,
-		80, 24,
-		82, 18,
-		88, 4,
-		91, 13,
-		93, 25,
-		95, 40,
-		102, 38,
-		112, 35,
-		108, 45,
-		103, 60,
-		106, 64,
-		112, 66,
-		117, 67,
-		109, 74,
-		110, 83,
-		108, 89,
-		104, 93,
-		111, 100,
-		103, 105,
-		102, 110,
-		100, 116,
-		106, 121,
-		103, 125,
-		99, 128,
-		96, 136,
-		88, 145,
-		80, 149,
-		65, 148,
-		54, 144,
-		46, 133,
-		35, 137,
-		40, 126,
-		25, 125,
-		31, 115,
-		10, 104,
-		29, 92,
-		1, 77,
-		29, 63,
-		15, 38
-	};
+	b2BodyDef body;
 
-	int counter = 0;
-	for (int i = 0; i < 49; ++i)
+	if (type == 'd')
 	{
-		vertices[i].Set(PIXEL_TO_METERS(points[counter]), PIXEL_TO_METERS(points[counter + 1]));
-		counter += 2;
+		body.type = b2_dynamicBody;
 	}
 
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
-	b2BodyDef chainBody;
-	chainBody.position.Set(PIXEL_TO_METERS(App->input->GetMouseX()), PIXEL_TO_METERS(App->input->GetMouseY()));
+	b2Body* b = world->CreateBody(&body);
 
-	b2Body* chainB = world->CreateBody(&chainBody);
+	b2ChainShape shape;
 
+	b2Vec2* vertix = new b2Vec2[num / 2];
 
-	b2ChainShape chain;
-	chain.CreateLoop(vertices, 49);
+	for (int i = 0; i < (num / 2); i++)
+	{
+		vertix[i] = { PIXEL_TO_METERS(arr[i * 2]), PIXEL_TO_METERS(arr[i * 2 + 1]) };
+	}
 
-	b2FixtureDef chainFixture;
-	chainFixture.shape = &chain;
+	shape.CreateLoop(vertix, num / 2);
 
-	chainB->CreateFixture(&chainFixture);
-	
-	bodyReturn* chainBodyPointer = new bodyReturn();
-	chainBodyPointer->bodyPointer = chainB;
-	chainBodyPointer->getRotation();
-	return chainBodyPointer;
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0;
 
-	
+	b->CreateFixture(&fixture);
+
+	bodyReturn* pBody = new bodyReturn();
+	pBody->bodyPointer = b;
+
+	return pBody;
 }
 
 bool ModulePhysics::Start()
@@ -173,26 +122,7 @@ bool ModulePhysics::Start()
 	LOG("Creating Physics 2D environment");
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
-	/*
-	TODELETE
-	// big static circle as "ground" in the middle of the screen
-	int x = SCREEN_WIDTH / 2;
-	int y = SCREEN_HEIGHT / 1.5f;
-	int diameter = SCREEN_WIDTH / 2;
-
-	b2BodyDef body;
-	body.type = b2_staticBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* b = world->CreateBody(&body);
-
-	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
-
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	b->CreateFixture(&fixture);
-	*/
+	
 	return true;
 }
 
