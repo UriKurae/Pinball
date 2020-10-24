@@ -29,7 +29,7 @@ bodyReturn* ModulePhysics::createCircle(float posX, float posY, float rad)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
-	//body.angle = 1.0f;
+
 	float radius = PIXEL_TO_METERS(rad);
 	body.position.Set(PIXEL_TO_METERS(posX), PIXEL_TO_METERS(posY));
 
@@ -173,7 +173,8 @@ bool ModulePhysics::Start()
 	LOG("Creating Physics 2D environment");
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
-
+	/*
+	TODELETE
 	// big static circle as "ground" in the middle of the screen
 	int x = SCREEN_WIDTH / 2;
 	int y = SCREEN_HEIGHT / 1.5f;
@@ -191,7 +192,7 @@ bool ModulePhysics::Start()
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	b->CreateFixture(&fixture);
-
+	*/
 	return true;
 }
 

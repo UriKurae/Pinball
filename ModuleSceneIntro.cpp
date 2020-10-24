@@ -26,6 +26,10 @@ bool ModuleSceneIntro::Start()
 	circle = App->textures->Load("pinball/wheel.png"); 
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
+	pinballMap = App->textures->Load("pinball/Map1.png");
+	
+	LoadMapTextures();
+		
 
 	return ret;
 }
@@ -42,6 +46,9 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	
+	App->renderer->Blit(pinballMap, 0, 0, &mapRect);
+
+
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		bodyReturn *circle = App->physics->createCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25.0f);
@@ -84,4 +91,17 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	return UPDATE_CONTINUE;
+}
+
+
+void ModuleSceneIntro::LoadMapTextures()
+{
+
+	// Rect for the map itself
+	mapRect.w = 256;
+	mapRect.h = 432;
+	mapRect.x = 1;
+	mapRect.y = 1;
+
+
 }

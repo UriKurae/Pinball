@@ -17,6 +17,8 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	void LoadMapTextures();
+
 public:
 
 	p2List<bodyReturn*> circleList;
@@ -26,4 +28,7 @@ public:
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;
+	SDL_Texture* pinballMap;
+
+	SDL_Rect mapRect;
 };
