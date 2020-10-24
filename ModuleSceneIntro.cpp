@@ -41,8 +41,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	// TODO 5: Move all creation of bodies on 1,2,3 key press here in the scene
-	// On space bar press, create a circle on mouse position
+	
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		bodyReturn *circle = App->physics->createCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25.0f);
@@ -60,8 +59,7 @@ update_status ModuleSceneIntro::Update()
 		bodyReturn *rick = App->physics->createChains();
 		rickList.add(rick);
 	}
-	// TODO 7: Draw all the circles using "circle" texture
-
+	
 
 
 	p2List_item<bodyReturn*>* itemCircle = circleList.getFirst();
@@ -70,7 +68,7 @@ update_status ModuleSceneIntro::Update()
 
 	while (itemCircle != NULL )
 	{
-		//App->renderer->Blit(circle, itemCircle->data->getPosition().x - (itemCircle->data->width), itemCircle->data->getPosition().y - (itemCircle->data->height),0,1.0f, itemCircle->data->getRotation());
+
 		App->renderer->Blit(circle, itemCircle->data->getPosition().x - (itemCircle->data->width), itemCircle->data->getPosition().y - (itemCircle->data->height), 0, 1.0f, itemCircle->data->getRotation());
 		itemCircle = itemCircle->next;
 	}

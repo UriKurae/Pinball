@@ -18,10 +18,6 @@ class b2Body;
 class b2Vec2;
 
 
-// TODO 6: Create a small class that keeps a pointer to the b2Body
-// and has a method to request the position
-// then write the implementation in the .cpp
-// Then make your circle creation function to return a pointer to that class
 class bodyReturn
 {
 public:
@@ -51,7 +47,7 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	// TODO 4: Move body creation to 3 functions to create circles, rectangles and chains
+	
 	bodyReturn* createCircle(float posX, float posY, float rad);
 	bodyReturn* createRectangle(float posX, float posY, float width, float height);
 	bodyReturn* createChains();

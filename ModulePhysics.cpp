@@ -53,7 +53,7 @@ bodyReturn* ModulePhysics::createCircle(float posX, float posY, float rad)
 // Create Rectangles
 bodyReturn* ModulePhysics::createRectangle(float posX, float posY, float width, float height)
 {
-	// TODO 1: When pressing 2, create a box on the mouse position
+	
 	b2BodyDef boxBody;
 	boxBody.type = b2_dynamicBody;
 	boxBody.position.Set(PIXEL_TO_METERS(posX), PIXEL_TO_METERS(posY));
@@ -77,29 +77,13 @@ bodyReturn* ModulePhysics::createRectangle(float posX, float posY, float width, 
 
 	return rectangleBody;
 
-	// TODO 2: To have the box behave normally, set fixture's density to 1.0f
+	
 }
 
 //Create Chains
 bodyReturn* ModulePhysics::createChains()
 {
-	// TODO 3: Create a chain shape using those vertices
-		// remember to convert them from pixels to meters!
-		/*int points[24] = {
-			-38, 80,
-			-44, -54,
-			-16, -60,
-			-16, -17,
-			19, -19,
-			19, -79,
-			61, -77,
-			57, 73,
-			17, 78,
-			20, 16,
-			-25, 13,
-			-9, 72
-		};*/
-
+	
 	b2Vec2 vertices[49];
 	int points[98] =
 	{
