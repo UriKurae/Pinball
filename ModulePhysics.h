@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "Box2D/Box2D/Box2D.h"
 
 
 #define GRAVITY_X 0.0f
@@ -16,13 +17,14 @@
 class b2World;
 class b2Body;
 class b2Vec2;
+enum b2BodyType;
 
 
-class bodyReturn
+class PhysBody
 {
 public:
-	bodyReturn():bodyPointer(nullptr), width(0), height(0){}
-	bodyReturn(b2Body* body) : bodyPointer(body){}
+	PhysBody():bodyPointer(nullptr), width(0), height(0){}
+	PhysBody(b2Body* body) : bodyPointer(body){}
 
 	b2Body* bodyPointer = nullptr;
 
@@ -48,9 +50,9 @@ public:
 	bool CleanUp();
 
 	
-	bodyReturn* createCircle(float posX, float posY, float rad);
-	bodyReturn* createRectangle(float posX, float posY, float width, float height);
-	bodyReturn* createChain(int x, int y, int* arr, int num,const char type);
+	PhysBody* createCircle(float posX, float posY, float rad);
+	PhysBody* createRectangle(float posX, float posY, float width, float height);
+	PhysBody* createChain(int x, int y, int* arr, int num, b2BodyType type = b2BodyType::b2_staticBody);
 
 private:
 

@@ -20,9 +20,12 @@ public:
 
 public:
 
-	SDL_Texture* circle;
+	SDL_Texture* ballTexture;
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	SDL_Texture* pinballMap;
+
+	// Player's ball
+	PhysBody* ball;
 
 };

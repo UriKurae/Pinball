@@ -5,7 +5,7 @@
 #include "ModulePhysics.h"
 #include "math.h"
 
-#include "Box2D/Box2D/Box2D.h"
+//#include "Box2D/Box2D/Box2D.h"
 
 #ifdef _DEBUG
 #pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
@@ -25,7 +25,7 @@ ModulePhysics::~ModulePhysics()
 }
 
 // Create Circles
-bodyReturn* ModulePhysics::createCircle(float posX, float posY, float rad)
+PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
@@ -42,7 +42,7 @@ bodyReturn* ModulePhysics::createCircle(float posX, float posY, float rad)
 	fixture.shape = &shape;
 
 	b->CreateFixture(&fixture);
-	bodyReturn* circleBody = new bodyReturn();
+	PhysBody* circleBody = new PhysBody();
 	circleBody->bodyPointer = b;
 	circleBody->height = METERS_TO_PIXELS(radius);
 	circleBody->width = METERS_TO_PIXELS(radius);
@@ -51,7 +51,7 @@ bodyReturn* ModulePhysics::createCircle(float posX, float posY, float rad)
 }
 
 // Create Rectangles
-bodyReturn* ModulePhysics::createRectangle(float posX, float posY, float width, float height)
+PhysBody* ModulePhysics::createRectangle(float posX, float posY, float width, float height)
 {
 	
 	b2BodyDef boxBody;
@@ -70,7 +70,7 @@ bodyReturn* ModulePhysics::createRectangle(float posX, float posY, float width, 
 
 	b->CreateFixture(&boxFixture);
 
-	bodyReturn* rectangleBody = new bodyReturn();
+	PhysBody* rectangleBody = new PhysBody();
 	rectangleBody->bodyPointer = b;
 	rectangleBody->height = METERS_TO_PIXELS(width);
 	rectangleBody->width = METERS_TO_PIXELS(height);
@@ -81,14 +81,12 @@ bodyReturn* ModulePhysics::createRectangle(float posX, float posY, float width, 
 }
 
 //Create Chains
-bodyReturn* ModulePhysics::createChain(int x, int y, int* arr, int num, const char type)
+PhysBody* ModulePhysics::createChain(int x, int y, int* arr, int num, b2BodyType type)
 {
 	b2BodyDef body;
 
-	if (type == 'd')
-	{
-		body.type = b2_dynamicBody;
-	}
+	body.type = type;
+	
 
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
@@ -111,7 +109,7 @@ bodyReturn* ModulePhysics::createChain(int x, int y, int* arr, int num, const ch
 
 	b->CreateFixture(&fixture);
 
-	bodyReturn* pBody = new bodyReturn();
+	PhysBody* pBody = new PhysBody();
 	pBody->bodyPointer = b;
 
 	return pBody;
@@ -232,7 +230,7 @@ bool ModulePhysics::CleanUp()
 	return true;
 }
 
-b2Vec2 bodyReturn::getPosition()
+b2Vec2 PhysBody::getPosition()
 {
 	b2Vec2 pos;
 
@@ -246,7 +244,7 @@ b2Vec2 bodyReturn::getPosition()
 	
 }
 
-double bodyReturn::getRotation()
+double PhysBody::getRotation()
 {	
 	double rot = (double)(RADTODEG * bodyPointer->GetTransform().q.GetAngle());
 
