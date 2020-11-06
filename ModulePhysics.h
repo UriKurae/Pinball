@@ -51,9 +51,9 @@ public:
 
 	
 	PhysBody* createCircle(float posX, float posY, float rad);
-	PhysBody* createRectangle(float posX, float posY, float width, float height);
+	PhysBody* createRectangle(float posX, float posY, float width, float height, b2BodyType type = b2BodyType::b2_staticBody);
 	PhysBody* createChain(int x, int y, int* arr, int num, b2BodyType type = b2BodyType::b2_staticBody);
-
+	
 private:
 
 	bool debug;

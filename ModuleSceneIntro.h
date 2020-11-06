@@ -18,6 +18,8 @@ public:
 
 	void MapChain();
 
+	void CreateLevers();
+
 public:
 
 	SDL_Texture* ballTexture;
@@ -27,5 +29,16 @@ public:
 
 	// Player's ball
 	PhysBody* ball;
+	bool launched = false;
+
+	// Player's levers
+	b2RevoluteJointDef leverJointA;
+	PhysBody* anchorPointA;
+	PhysBody* leverA;
+
+	b2RevoluteJointDef leverJointB;
+	PhysBody* anchorPointB;
+	PhysBody* leverB;
+
 
 };

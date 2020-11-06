@@ -28,11 +28,13 @@ bool ModuleSceneIntro::Start()
 	rick = App->textures->Load("pinball/rick_head.png");
 	pinballMap = App->textures->Load("pinball/Map.png");
 
-	// Creation and setup of the ball
+	// Creation and setup of the ball. 
 
 	 ball = App->physics->createCircle(454.0f, 731.0f, 13.0f);
 	 
-
+	 // Creation and setup of the levers
+	 CreateLevers();
+	 MapChain();
 
 	return ret;
 }
@@ -49,23 +51,24 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && launched == false)
 	{
-		ball->bodyPointer->ApplyForce(b2Vec2(0, 2000), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
+		ball->bodyPointer->ApplyForce(b2Vec2(0, 5000), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
+		launched = true;
+		//App->physics->createRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 20, 20); 
 	}
 
 
 	App->renderer->Blit(pinballMap, 0, 0, NULL);
 	App->renderer->Blit(ballTexture, (ball->getPosition().x - ball->width), ball->getPosition().y - ball->width, NULL);
 
-	MapChain();
+
 
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::MapChain()
 {
-	PhysBody* chain;
 
 	// Pivot 0, 0
 	int Map[206] = {
@@ -176,4 +179,24 @@ void ModuleSceneIntro::MapChain()
 
 
 	App->physics->createChain(0, 0, Map, 206);
+}
+
+void ModuleSceneIntro::CreateLevers()
+{
+	anchorPointA = App->physics->createRectangle(164, 774, 0.1f, 0.1f );
+	leverA = App->physics->createRectangle(185, 775, 0.45f, 0.1f, b2BodyType::b2_kinematicBody);
+	
+
+	anchorPointB = App->physics->createRectangle(282, 775, 0.1f, 0.1f);
+	leverB = App->physics->createRectangle(260, 775, 0.45f, 0.1f, b2BodyType::b2_kinematicBody);
+
+	b2RevoluteJointDef revoluteJointDef;
+	revoluteJointDef.bodyA = anchorPointA->bodyPointer;
+	revoluteJointDef.bodyB = leverA->bodyPointer;
+	revoluteJointDef.collideConnected = false;
+	revoluteJointDef.localAnchorA.Set(0.1f, 0.1f);
+	revoluteJointDef.localAnchorB.Set(0.25f, 0.05f);
+	//leverJointA = (b2RevoluteJoint*) 
+	
+
 }

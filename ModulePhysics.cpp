@@ -51,11 +51,11 @@ PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad)
 }
 
 // Create Rectangles
-PhysBody* ModulePhysics::createRectangle(float posX, float posY, float width, float height)
+PhysBody* ModulePhysics::createRectangle(float posX, float posY, float width, float height, b2BodyType type)
 {
 	
 	b2BodyDef boxBody;
-	boxBody.type = b2_dynamicBody;
+	boxBody.type = type;
 	boxBody.position.Set(PIXEL_TO_METERS(posX), PIXEL_TO_METERS(posY));
 
 	b2Body* b = world->CreateBody(&boxBody);
