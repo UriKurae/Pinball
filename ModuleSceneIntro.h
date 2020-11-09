@@ -32,11 +32,11 @@ public:
 	bool launched = false;
 
 	// Player's levers
-	b2RevoluteJointDef leverJointA;
+	b2RevoluteJoint* leverJointA;
 	PhysBody* anchorPointA;
 	PhysBody* leverA;
 
-	b2RevoluteJointDef leverJointB;
+	b2RevoluteJoint* leverJointB;
 	PhysBody* anchorPointB;
 	PhysBody* leverB;
 

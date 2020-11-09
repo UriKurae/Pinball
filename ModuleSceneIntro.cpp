@@ -58,6 +58,11 @@ update_status ModuleSceneIntro::Update()
 		//App->physics->createRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 20, 20); 
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	{
+		
+	}
+
 
 	App->renderer->Blit(pinballMap, 0, 0, NULL);
 	App->renderer->Blit(ballTexture, (ball->getPosition().x - ball->width), ball->getPosition().y - ball->width, NULL);
@@ -183,20 +188,31 @@ void ModuleSceneIntro::MapChain()
 
 void ModuleSceneIntro::CreateLevers()
 {
-	anchorPointA = App->physics->createRectangle(164, 774, 0.1f, 0.1f );
-	leverA = App->physics->createRectangle(185, 775, 0.45f, 0.1f, b2BodyType::b2_kinematicBody);
+	anchorPointA = App->physics->createRectangle(150, 710, 0.1f, 0.1f );
+	leverA = App->physics->createRectangle(170, 710, 0.55f, 0.1f, b2BodyType::b2_kinematicBody);
 	
 
-	anchorPointB = App->physics->createRectangle(282, 775, 0.1f, 0.1f);
-	leverB = App->physics->createRectangle(260, 775, 0.45f, 0.1f, b2BodyType::b2_kinematicBody);
+	anchorPointB = App->physics->createRectangle(294, 710, 0.1f, 0.1f);
+	leverB = App->physics->createRectangle(274, 710, 0.55f, 0.1f, b2BodyType::b2_kinematicBody);
 
 	b2RevoluteJointDef revoluteJointDef;
-	revoluteJointDef.bodyA = anchorPointA->bodyPointer;
-	revoluteJointDef.bodyB = leverA->bodyPointer;
+	revoluteJointDef.Initialize(leverA->bodyPointer, anchorPointA->bodyPointer, anchorPointA->bodyPointer->GetWorldCenter());
 	revoluteJointDef.collideConnected = false;
-	revoluteJointDef.localAnchorA.Set(0.1f, 0.1f);
-	revoluteJointDef.localAnchorB.Set(0.25f, 0.05f);
-	//leverJointA = (b2RevoluteJoint*) 
-	
+	revoluteJointDef.lowerAngle = DEGTORAD * 345;
+	revoluteJointDef.upperAngle = DEGTORAD * 45;
+	revoluteJointDef.enableLimit = true;
+	revoluteJointDef.maxMotorTorque = 5;
+	revoluteJointDef.motorSpeed = 0.0f;
+	revoluteJointDef.enableMotor = true;
 
+	revoluteJointDef.Initialize(leverB->bodyPointer, anchorPointB->bodyPointer, anchorPointB->bodyPointer->GetWorldCenter());
+	revoluteJointDef.collideConnected = false;
+	revoluteJointDef.lowerAngle = DEGTORAD * 195;
+	revoluteJointDef.upperAngle = DEGTORAD * 135;
+	revoluteJointDef.enableLimit = true;
+	revoluteJointDef.maxMotorTorque = 5;
+	revoluteJointDef.motorSpeed = 0.0f;
+	revoluteJointDef.enableMotor = true;
+
+	
 }
