@@ -524,7 +524,7 @@ void ModuleSceneIntro::MapChain()
 		66, 177
 	};
 
-	App->physics->createChain(0, 0, Wall1, 186);
+	App->physics->createChain(0, 0, Wall1, 34);
 
 	int Wall2[32] = {
 	162, 110,
@@ -545,7 +545,7 @@ void ModuleSceneIntro::MapChain()
 	164, 115
 	};
 
-	App->physics->createChain(0, 0, Wall2, 186);
+	App->physics->createChain(0, 0, Wall2, 32);
 }
 
 void ModuleSceneIntro::CreateLevers()
