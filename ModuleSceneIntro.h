@@ -43,6 +43,4 @@ public:
 	b2RevoluteJoint* leverJointB;
 	PhysBody* anchorPointB;
 	PhysBody* leverB;
-
-
 };
