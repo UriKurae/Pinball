@@ -26,6 +26,10 @@ public:
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	SDL_Texture* pinballMap;
+	
+	SDL_Texture* triangleLeft;
+	SDL_Texture* triangleRight;
+
 
 	// Player's ball
 	PhysBody* ball;

@@ -27,6 +27,8 @@ bool ModuleSceneIntro::Start()
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 	pinballMap = App->textures->Load("pinball/Map.png");
+	triangleLeft = App->textures->Load("pinball/triangleLeft.png");
+	triangleRight = App->textures->Load("pinball/triangleRight.png");
 
 	// Creation and setup of the ball. 
 
@@ -78,7 +80,8 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(pinballMap, 0, 0, NULL);
 	App->renderer->Blit(ballTexture, (ball->getPosition().x - ball->width), ball->getPosition().y - ball->width, NULL);
-
+	App->renderer->Blit(triangleLeft, 106, 577,NULL);
+	App->renderer->Blit(triangleRight, 300, 577,NULL);
 
 
 	return UPDATE_CONTINUE;
@@ -195,8 +198,81 @@ void ModuleSceneIntro::MapChain()
 	};
 	App->physics->createChain(0, 0, MapBorder, 206);
 
+	// Pivot 0, 0
+	int wallLeverLeft[38] = {
+		134, 709,
+		113, 700,
+		87, 685,
+		69, 674,
+		60, 666,
+		60, 624,
+		59, 603,
+		60, 595,
+		66, 590,
+		67, 602,
+		66, 616,
+		66, 636,
+		68, 648,
+		74, 660,
+		92, 672,
+		108, 680,
+		126, 688,
+		138, 694,
+		135, 704
+	};
+	App->physics->createChain(0, 0, wallLeverLeft, 38);
 
+	// Pivot 0, 0
+	int wallTriangleLeft[38] = {
+		140, 659,
+		131, 654,
+		119, 648,
+		109, 643,
+		106, 640,
+		106, 618,
+		106, 598,
+		106, 583,
+		106, 579,
+		106, 575,
+		110, 577,
+		116, 587,
+		123, 601,
+		132, 619,
+		140, 638,
+		145, 648,
+		148, 655,
+		148, 660,
+		144, 662
+	};
 
+	App->physics->createChain(0, 0, wallTriangleLeft, 38);
+	
+	// Pivot 0, 0
+	int wallTriangleRight[42] = {
+		300, 661,
+		298, 657,
+		305, 640,
+		315, 620,
+		321, 608,
+		327, 596,
+		332, 584,
+		336, 578,
+		340, 578,
+		341, 581,
+		341, 588,
+		341, 598,
+		341, 611,
+		341, 621,
+		341, 632,
+		341, 638,
+		340, 643,
+		335, 647,
+		322, 654,
+		312, 659,
+		304, 663
+	};
+
+	App->physics->createChain(0, 0, wallTriangleRight, 42);
 
 
 }
