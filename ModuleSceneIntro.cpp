@@ -51,18 +51,30 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && launched == false)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && launched == false)
 	{
-		ball->bodyPointer->ApplyForce(b2Vec2(0, 5000), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
+		ball->bodyPointer->ApplyForce(b2Vec2(0, -50), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
 		launched = true;
-		//App->physics->createRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 20, 20); 
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
-		
+		leverJointB->SetMotorSpeed(-10.0f);
+	
+	}
+	else
+	{
+		leverJointB->SetMotorSpeed(10.0f);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	{
+		leverJointA->SetMotorSpeed(10.0f);
+	}
+	else
+	{
+		leverJointA->SetMotorSpeed(-10.0f);
+	}
 
 	App->renderer->Blit(pinballMap, 0, 0, NULL);
 	App->renderer->Blit(ballTexture, (ball->getPosition().x - ball->width), ball->getPosition().y - ball->width, NULL);
@@ -75,8 +87,8 @@ update_status ModuleSceneIntro::Update()
 void ModuleSceneIntro::MapChain()
 {
 
-	// Pivot 0, 0
-	int Map[206] = {
+	// Map outside boundaries
+	int MapBorder[206] = {
 		455, 765,
 		468, 760,
 		472, 740,
@@ -181,38 +193,45 @@ void ModuleSceneIntro::MapChain()
 		437, 755,
 		445, 764
 	};
+	App->physics->createChain(0, 0, MapBorder, 206);
 
 
-	App->physics->createChain(0, 0, Map, 206);
+
+
+
 }
 
 void ModuleSceneIntro::CreateLevers()
 {
 	anchorPointA = App->physics->createRectangle(150, 710, 0.1f, 0.1f );
-	leverA = App->physics->createRectangle(170, 710, 0.55f, 0.1f, b2BodyType::b2_kinematicBody);
+	leverA = App->physics->createRectangle(174, 710, 0.65f, 0.1f, b2BodyType::b2_dynamicBody);
+	
 	
 
 	anchorPointB = App->physics->createRectangle(294, 710, 0.1f, 0.1f);
-	leverB = App->physics->createRectangle(274, 710, 0.55f, 0.1f, b2BodyType::b2_kinematicBody);
+	leverB = App->physics->createRectangle(270, 710, 0.65f, 0.1f, b2BodyType::b2_dynamicBody);
+
 
 	b2RevoluteJointDef revoluteJointDef;
 	revoluteJointDef.Initialize(leverA->bodyPointer, anchorPointA->bodyPointer, anchorPointA->bodyPointer->GetWorldCenter());
 	revoluteJointDef.collideConnected = false;
-	revoluteJointDef.lowerAngle = DEGTORAD * 345;
+	revoluteJointDef.lowerAngle = DEGTORAD * -20;
 	revoluteJointDef.upperAngle = DEGTORAD * 45;
 	revoluteJointDef.enableLimit = true;
-	revoluteJointDef.maxMotorTorque = 5;
+	revoluteJointDef.maxMotorTorque = 50.0f;
 	revoluteJointDef.motorSpeed = 0.0f;
 	revoluteJointDef.enableMotor = true;
+	leverJointA =(b2RevoluteJoint*) App->physics->GetWorld()->CreateJoint(&revoluteJointDef);
 
 	revoluteJointDef.Initialize(leverB->bodyPointer, anchorPointB->bodyPointer, anchorPointB->bodyPointer->GetWorldCenter());
 	revoluteJointDef.collideConnected = false;
-	revoluteJointDef.lowerAngle = DEGTORAD * 195;
-	revoluteJointDef.upperAngle = DEGTORAD * 135;
+	revoluteJointDef.lowerAngle = DEGTORAD * -45;
+	revoluteJointDef.upperAngle = DEGTORAD * 20;
 	revoluteJointDef.enableLimit = true;
-	revoluteJointDef.maxMotorTorque = 5;
+	revoluteJointDef.maxMotorTorque = 50.0f;
 	revoluteJointDef.motorSpeed = 0.0f;
 	revoluteJointDef.enableMotor = true;
+	leverJointB = (b2RevoluteJoint*)App->physics->GetWorld()->CreateJoint(&revoluteJointDef);
 
 	
 }

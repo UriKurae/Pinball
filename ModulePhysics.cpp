@@ -38,7 +38,7 @@ PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad)
 	b2CircleShape shape;
 	shape.m_radius = radius;
 	b2FixtureDef fixture;
-	fixture.density = 1.0f;
+	fixture.density = 0.2f;
 	fixture.shape = &shape;
 
 	b->CreateFixture(&fixture);
@@ -58,15 +58,17 @@ PhysBody* ModulePhysics::createRectangle(float posX, float posY, float width, fl
 	boxBody.type = type;
 	boxBody.position.Set(PIXEL_TO_METERS(posX), PIXEL_TO_METERS(posY));
 
+
 	b2Body* b = world->CreateBody(&boxBody);
 
 	b2PolygonShape boxShape;
 	boxShape.SetAsBox(width, height);
 
 	b2FixtureDef boxFixture;
-	boxFixture.density = 1.0f;
+	boxFixture.density = 0.5f;
 	boxFixture.friction = 0.3f;
 	boxFixture.shape = &boxShape;
+
 
 	b->CreateFixture(&boxFixture);
 
@@ -113,6 +115,11 @@ PhysBody* ModulePhysics::createChain(int x, int y, int* arr, int num, b2BodyType
 	pBody->bodyPointer = b;
 
 	return pBody;
+}
+
+b2World* ModulePhysics::GetWorld()
+{
+	return world;
 }
 
 bool ModulePhysics::Start()
