@@ -35,10 +35,10 @@ public:
 	b2Vec2 getPosition();
 	double getRotation();
 
-
+	Module* listener;
 };
 
-class ModulePhysics : public Module
+class ModulePhysics : public Module, public b2ContactListener
 {
 public:
 	ModulePhysics(Application* app, bool start_enabled = true);
@@ -54,8 +54,12 @@ public:
 	PhysBody* createRectangle(float posX, float posY, float width, float height, b2BodyType type = b2BodyType::b2_staticBody);
 	PhysBody* createChain(int x, int y, int* arr, int num, b2BodyType type = b2BodyType::b2_staticBody);
 	b2World* GetWorld();
+
+	void BeginContact(b2Contact* contact);
+
 private:
 
 	bool debug;
 	b2World* world;
+	b2ContactListener listener;
 };

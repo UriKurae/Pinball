@@ -6,6 +6,7 @@
 #include "ModuleTextures.h"
 #include "ModulePhysics.h"
 #include "Box2D/Box2D/Box2D.h"
+#include "ModuleAudio.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -29,6 +30,8 @@ bool ModuleSceneIntro::Start()
 	pinballMap = App->textures->Load("pinball/Map.png");
 	triangleLeft = App->textures->Load("pinball/triangleLeft.png");
 	triangleRight = App->textures->Load("pinball/triangleRight.png");
+
+	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	// Creation and setup of the ball. 
 
@@ -57,12 +60,12 @@ update_status ModuleSceneIntro::Update()
 	{
 		ball->bodyPointer->ApplyForce(b2Vec2(0, -50), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
 		launched = true;
+		ball->listener = this;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
 		leverJointB->SetMotorSpeed(-10.0f);
-	
 	}
 	else
 	{
@@ -199,7 +202,7 @@ void ModuleSceneIntro::MapChain()
 	App->physics->createChain(0, 0, MapBorder, 206);
 
 	// Pivot 0, 0
-	int MapInterior[214] = {
+	/*int MapInterior[214] = {
 		7, 535,
 		7, 800,
 		170, 800,
@@ -309,7 +312,7 @@ void ModuleSceneIntro::MapChain()
 		3, 402
 	};
 
-	App->physics->createChain(0, 0, MapInterior, 214);
+	App->physics->createChain(0, 0, MapInterior, 214);*/
 
 	// Pivot 0, 0
 	int wallLeverLeft[38] = {
@@ -581,4 +584,11 @@ void ModuleSceneIntro::CreateLevers()
 	leverJointB = (b2RevoluteJoint*)App->physics->GetWorld()->CreateJoint(&revoluteJointDef);
 
 	
+}
+
+
+void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
+{
+	int x, y;
+	App->audio->PlayFx(bonus_fx);
 }

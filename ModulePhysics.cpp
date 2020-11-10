@@ -44,6 +44,7 @@ PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad)
 	b->CreateFixture(&fixture);
 	PhysBody* circleBody = new PhysBody();
 	circleBody->bodyPointer = b;
+	b->SetUserData(circleBody);
 	circleBody->height = METERS_TO_PIXELS(radius);
 	circleBody->width = METERS_TO_PIXELS(radius);
 
@@ -127,6 +128,8 @@ bool ModulePhysics::Start()
 	LOG("Creating Physics 2D environment");
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+
+	world->SetContactListener(this);
 	
 	return true;
 }
@@ -256,4 +259,16 @@ double PhysBody::getRotation()
 	double rot = (double)(RADTODEG * bodyPointer->GetTransform().q.GetAngle());
 
 	return rot;
+}
+
+void ModulePhysics::BeginContact(b2Contact* contact)
+{
+	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
+	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
+
+	if (physA && physA->listener != NULL)
+		physA->listener->OnCollision(physA, physB);
+
+	if (physB && physB->listener != NULL)
+		physB->listener->OnCollision(physB, physA);
 }

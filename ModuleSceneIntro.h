@@ -20,6 +20,8 @@ public:
 
 	void CreateLevers();
 
+	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
+
 public:
 
 	SDL_Texture* ballTexture;
@@ -43,4 +45,6 @@ public:
 	b2RevoluteJoint* leverJointB;
 	PhysBody* anchorPointB;
 	PhysBody* leverB;
+
+	uint bonus_fx;
 };

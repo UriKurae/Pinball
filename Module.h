@@ -3,6 +3,7 @@
 #include "Globals.h"
 
 class Application;
+class PhysBody;
 
 class Module
 {
@@ -69,5 +70,9 @@ public:
 	virtual bool CleanUp() 
 	{ 
 		return true; 
+	}
+
+	virtual void OnCollision(PhysBody* bodyA, PhysBody* bodyB)
+	{
 	}
 };
