@@ -31,6 +31,8 @@ bool ModuleSceneIntro::Start()
 	pinballMap = App->textures->Load("pinball/Map.png");
 	triangleLeft = App->textures->Load("pinball/triangleLeft.png");
 	triangleRight = App->textures->Load("pinball/triangleRight.png");
+	palancaDerecha = App->textures->Load("pinball/palancaDerecha.png");
+	palancaIzquierda = App->textures->Load("pinball/palancaIzquierda.png");
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
@@ -60,7 +62,8 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	
+	App->renderer->Blit(pinballMap, 0, 0, NULL);
+
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && launched == false)
 	{
 		ball->bodyPointer->ApplyForce(b2Vec2(0, -50), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
@@ -71,25 +74,29 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
 		leverJointB->SetMotorSpeed(-10.0f);
+		App->renderer->Blit(palancaDerecha, 238, 697, NULL, 1.0f, (0, 60), 48, 10);
 	}
 	else
 	{
 		leverJointB->SetMotorSpeed(10.0f);
+		App->renderer->Blit(palancaDerecha, 240, 700, NULL, 1.0f, (0, -15), 48, 10);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
 		leverJointA->SetMotorSpeed(10.0f);
+		App->renderer->Blit(palancaIzquierda, 145, 700, NULL, 1.0f, (0, -60), 11, 10);
 	}
 	else
 	{
 		leverJointA->SetMotorSpeed(-10.0f);
+		App->renderer->Blit(palancaIzquierda, 145, 700, NULL, 1.0f, (0, 15), 11, 10);
 	}
 
-	App->renderer->Blit(pinballMap, 0, 0, NULL);
+
 	App->renderer->Blit(ballTexture, (ball->getPosition().x - ball->width), ball->getPosition().y - ball->width, NULL);
-	App->renderer->Blit(triangleLeft, 106, 577,NULL);
-	App->renderer->Blit(triangleRight, 300, 577,NULL);
+	App->renderer->Blit(triangleLeft, 106, 577, NULL);
+	App->renderer->Blit(triangleRight, 300, 577, NULL);
 
 	App->fonts->BlitText(8, 10, yellowFont, "SCORE:");
 
