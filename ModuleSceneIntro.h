@@ -28,7 +28,9 @@ public:
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	SDL_Texture* pinballMap;
-	
+	SDL_Texture* palancaDerecha;
+	SDL_Texture* palancaIzquierda;
+
 	SDL_Texture* triangleLeft;
 	SDL_Texture* triangleRight;
 
