@@ -52,7 +52,14 @@ public:
 	PhysBody* leverB;
 	float currentAngleLeverB = -15.0f;
 
+	PhysBody* mapPartToChange1 = nullptr;
+	PhysBody* mapPartToChange2 = nullptr;
+	PhysBody* mapPartToChange3 = nullptr;
+
 	//Fonts
 	int yellowFont = -1;
 	uint bonus_fx;
+
+	bool changeMap = false;
+	int mapToDraw = 0;
 };

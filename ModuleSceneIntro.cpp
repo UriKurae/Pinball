@@ -43,11 +43,12 @@ bool ModuleSceneIntro::Start()
 	yellowFont = App->fonts->Load("pinball/FontY.png", lookupTable, 5);
 	// Creation and setup of the ball. 
 
-	 ball = App->physics->createCircle(454.0f, 731.0f, 13.0f);
-	 ball->bodyTag = "Player";
+	ball = App->physics->createCircle(454.0f, 731.0f, 13.0f, 0);
+	ball->bodyTag = "Player";
 	 // Creation and setup of the levers
 	 CreateLevers();
 	 MapChain();
+	 mapToDraw = 1;
 
 	return ret;
 }
@@ -57,6 +58,16 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
+	App->textures->Unload(ballTexture);
+	App->textures->Unload(box);
+	App->textures->Unload(rick);
+	App->textures->Unload(pinballMap);
+	App->textures->Unload(triangleLeft);
+	App->textures->Unload(triangleRight);
+	App->textures->Unload(rightLeverTexture);
+	App->textures->Unload(leftLeverTexture);
+	App->textures->Unload(canyon);
+
 	return true;
 }
 
@@ -64,6 +75,20 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	App->renderer->Blit(pinballMap, 0, 0, NULL);
+
+	if (changeMap)
+	{
+		if (mapToDraw == 1)
+		{
+			mapToDraw = 2;
+		}
+		else if (mapToDraw == 2)
+		{
+			mapToDraw = 1;
+		}
+		MapChain();
+		changeMap = false;
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN /*&& launched == false*/)
 	{
@@ -125,7 +150,6 @@ update_status ModuleSceneIntro::Update()
 		}
 	}
 
-
 	App->renderer->Blit(triangleLeft, 106, 577, NULL);
 	App->renderer->Blit(triangleRight, 300, 577, NULL);
 	App->renderer->Blit(canyon, 28, 695, NULL);
@@ -141,21 +165,9 @@ update_status ModuleSceneIntro::Update()
 
 
 void ModuleSceneIntro::MapChain()
-{
-	//Little Bumpers
-	PhysBody* bumper1 = App->physics->createCircle(198, 189, 13, "SmallBumper",b2BodyType::b2_staticBody);
-	PhysBody* bumper2 = App->physics->createCircle(285, 242, 13, "SmallBumper",b2BodyType::b2_staticBody);
-	
-	//Little bumpers that hold the ball for some seconds
-	PhysBody* canyon1 = App->physics->createCircle(405, 715, 13.0f,"canyon", b2BodyType::b2_staticBody);
-	PhysBody* canyon2 = App->physics->createCircle(41, 715, 13.0f,"canyon", b2BodyType::b2_staticBody);
-
-
-	//Big centric bumper
-	App->physics->createCircle(224, 355, 50, "BigBumper", b2BodyType::b2_staticBody);
-
-	// Map outside boundaries
-	// Pivot 0, 0
+{	
+		// Map outside boundaries
+		// Pivot 0, 0
 	int MapBorder[206] = {
 		455, 765,
 		468, 760,
@@ -262,10 +274,8 @@ void ModuleSceneIntro::MapChain()
 		445, 764
 	};
 
-	App->physics->createChain(0, 0, MapBorder, 206);
-
 	// Pivot 0, 0
-	/*int MapInterior[214] = {
+	int MapInterior[216] = {
 		7, 535,
 		7, 800,
 		170, 800,
@@ -281,9 +291,9 @@ void ModuleSceneIntro::MapChain()
 		34, 517,
 		35, 444,
 		50, 433,
-		30, 381,
-		13, 350,
-		43, 331,
+		27, 381,
+		4, 324,
+		32, 306,
 		64, 381,
 		69, 375,
 		34, 271,
@@ -364,18 +374,17 @@ void ModuleSceneIntro::MapChain()
 		461, 493,
 		474, 410,
 		467, 326,
-		473, 203,
-		474, 89,
-		431, 24,
-		314, 8,
-		80, 17,
-		10, 85,
-		6, 182,
-		6, 298,
-		3, 402
+		478, 233,
+		492, 137,
+		456, 52,
+		320, 17,
+		152, 16,
+		57, 28,
+		14, 88,
+		5, 192,
+		-8, 312,
+		11, 423
 	};
-
-	App->physics->createChain(0, 0, MapInterior, 214);*/
 
 	// Pivot 0, 0
 	int wallLeverLeft[38] = {
@@ -400,10 +409,6 @@ void ModuleSceneIntro::MapChain()
 		135, 704
 	};
 
-	App->physics->createChain(0, 0, wallLeverLeft, 38);
-
-
-
 	// Pivot 0, 0
 	int WallLeverRight[20] = {
 		301, 699,
@@ -417,8 +422,6 @@ void ModuleSceneIntro::MapChain()
 		379, 675,
 		306, 711
 	};
-
-	App->physics->createChain(0, 0, WallLeverRight, 20);
 
 	// Pivot 0, 0
 	int wallTriangleLeft[38] = {
@@ -442,8 +445,6 @@ void ModuleSceneIntro::MapChain()
 		148, 660,
 		144, 662
 	};
-
-	App->physics->createChain(0, 0, wallTriangleLeft, 38);
 	
 	// Pivot 0, 0
 	int wallTriangleRight[42] = {
@@ -469,8 +470,6 @@ void ModuleSceneIntro::MapChain()
 		312, 659,
 		304, 663
 	};
-
-	App->physics->createChain(0, 0, wallTriangleRight, 42);
 
 	// Pivot 0, 0
 	int InteriorWallBridge[186] = {
@@ -569,8 +568,6 @@ void ModuleSceneIntro::MapChain()
 		394, 377
 	};
 
-	App->physics->createChain(0, 0, InteriorWallBridge, 186);
-
 	// Pivot 0, 0
 	int Wall1[34] = {
 		61, 179,
@@ -592,8 +589,6 @@ void ModuleSceneIntro::MapChain()
 		66, 177
 	};
 
-	App->physics->createChain(0, 0, Wall1, 34);
-
 	int Wall2[32] = {
 	162, 110,
 	172, 107,
@@ -613,18 +608,60 @@ void ModuleSceneIntro::MapChain()
 	164, 115
 	};
 
-	App->physics->createChain(0, 0, Wall2, 32);
+	
+	if (mapToDraw == 0)
+	{
+
+		mapPartToChange1 = App->physics->createChain(0, 0, MapBorder, 206);
+		mapPartToChange2 = App->physics->createChain(0, 0, InteriorWallBridge, 186);
+		mapPartToChange3 = App->physics->createChain(0, 0, MapInterior, 216);
+
+		mapPartToChange3->bodyPointer->SetActive(false);
+
+		//Little Bumpers
+		PhysBody* bumper1 = App->physics->createCircle(198, 189, 13.0f, 1, "SmallBumper", b2BodyType::b2_staticBody);
+		PhysBody* bumper2 = App->physics->createCircle(285, 242, 13.0f, 1, "SmallBumper", b2BodyType::b2_staticBody);
+
+		//Little bumpers that hold the ball for some seconds
+		PhysBody* canyon1 = App->physics->createCircle(405, 715, 13.0f, 0, "canyon", b2BodyType::b2_staticBody);
+		PhysBody* canyon2 = App->physics->createCircle(41, 715, 13.0f, 0, "canyon", b2BodyType::b2_staticBody);
+
+		//Big centric bumper
+		App->physics->createCircle(224, 355, 50, 1, "BigBumper", b2BodyType::b2_staticBody);
+
+		App->physics->createChain(0, 0, wallLeverLeft, 38);
+		App->physics->createChain(0, 0, WallLeverRight, 20);
+		App->physics->createChain(0, 0, wallTriangleLeft, 38);
+		App->physics->createChain(0, 0, wallTriangleRight, 42);
+		App->physics->createChain(0, 0, Wall1, 34);
+		App->physics->createChain(0, 0, Wall2, 32);
+
+		App->physics->createCircle(25, 340, 7.0f, 2, "sensor", b2BodyType::b2_staticBody);
+		App->physics->createCircle(425, 340, 7.0f, 2, "sensor", b2BodyType::b2_staticBody);
+	}
+	if (mapToDraw == 1)
+	{	
+		mapPartToChange3->bodyPointer->SetActive(false);
+		mapPartToChange1->bodyPointer->SetActive(true);
+		mapPartToChange2->bodyPointer->SetActive(true);
+	}
+	if (mapToDraw == 2)
+	{
+		mapPartToChange1->bodyPointer->SetActive(false);
+		mapPartToChange2->bodyPointer->SetActive(false);
+		mapPartToChange3->bodyPointer->SetActive(true);
+	}
 }
 
 void ModuleSceneIntro::CreateLevers()
 {
-	anchorPointA = App->physics->createRectangle(150, 710, 0.1f, 0.1f );
-	leverA = App->physics->createRectangle(174, 710, 0.65f, 0.1f, b2BodyType::b2_dynamicBody);
+	anchorPointA = App->physics->createRectangle(150, 710, 0.1f, 0.1f, 0);
+	leverA = App->physics->createRectangle(174, 710, 0.65f, 0.1f, 0, b2BodyType::b2_dynamicBody);
 	
 	
 
-	anchorPointB = App->physics->createRectangle(294, 710, 0.1f, 0.1f);
-	leverB = App->physics->createRectangle(270, 710, 0.65f, 0.1f, b2BodyType::b2_dynamicBody);
+	anchorPointB = App->physics->createRectangle(294, 710, 0.1f, 0.1f, 0);
+	leverB = App->physics->createRectangle(270, 710, 0.65f, 0.1f, 0, b2BodyType::b2_dynamicBody);
 
 
 	b2RevoluteJointDef revoluteJointDef;

@@ -35,6 +35,8 @@ public:
 	float rotation = 0;
 	std::string bodyTag;
 
+	int typeSensor = 0;
+
 	b2Vec2 getPosition();
 	double getRotation();
 
@@ -53,8 +55,8 @@ public:
 	bool CleanUp();
 
 	
-	PhysBody* createCircle(float posX, float posY, float rad, std::string bodyTag = "", b2BodyType type = b2BodyType::b2_dynamicBody);
-	PhysBody* createRectangle(float posX, float posY, float width, float height, b2BodyType type = b2BodyType::b2_staticBody);
+	PhysBody* createCircle(float posX, float posY, float rad, int typeSensor, std::string bodyTag = "", b2BodyType type = b2BodyType::b2_dynamicBody);
+	PhysBody* createRectangle(float posX, float posY, float width, float height, int typeSensor, b2BodyType type = b2BodyType::b2_staticBody);
 	PhysBody* createChain(int x, int y, int* arr, int num, b2BodyType type = b2BodyType::b2_staticBody);
 	b2World* GetWorld();
 

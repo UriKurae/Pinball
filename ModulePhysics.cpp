@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "ModuleRender.h"
 #include "ModulePhysics.h"
+#include "ModuleSceneIntro.h"
 #include "math.h"
 //#include "Box2D/Box2D/Box2D.h"
 
@@ -24,7 +25,7 @@ ModulePhysics::~ModulePhysics()
 }
 
 // Create Circles
-PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad, std::string tag, b2BodyType type)
+PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad, int typeSensor, std::string tag, b2BodyType type)
 {
 	b2BodyDef body;
 	body.type = type;
@@ -40,6 +41,11 @@ PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad, std::st
 	fixture.density = 0.2f;
 	fixture.shape = &shape;
 
+	if (typeSensor != 0)
+	{
+		fixture.isSensor = true;
+	}
+
 	b->CreateFixture(&fixture);
 	PhysBody* circleBody = new PhysBody();
 	circleBody->bodyPointer = b;
@@ -48,11 +54,16 @@ PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad, std::st
 	circleBody->height = METERS_TO_PIXELS(radius);
 	circleBody->width = METERS_TO_PIXELS(radius);
 
+	if (circleBody->bodyPointer->GetFixtureList()->IsSensor())
+	{
+		circleBody->typeSensor = typeSensor;
+	}
+
 	return circleBody;
 }
 
 // Create Rectangles
-PhysBody* ModulePhysics::createRectangle(float posX, float posY, float width, float height, b2BodyType type)
+PhysBody* ModulePhysics::createRectangle(float posX, float posY, float width, float height, int typeSensor, b2BodyType type)
 {
 	
 	b2BodyDef boxBody;
@@ -70,6 +81,10 @@ PhysBody* ModulePhysics::createRectangle(float posX, float posY, float width, fl
 	boxFixture.friction = 0.3f;
 	boxFixture.shape = &boxShape;
 
+	if (typeSensor != 0)
+	{
+		boxFixture.isSensor = true;
+	}
 
 	b->CreateFixture(&boxFixture);
 
@@ -78,9 +93,12 @@ PhysBody* ModulePhysics::createRectangle(float posX, float posY, float width, fl
 	rectangleBody->height = METERS_TO_PIXELS(width);
 	rectangleBody->width = METERS_TO_PIXELS(height);
 
-	return rectangleBody;
+	if (rectangleBody->bodyPointer->GetFixtureList()->IsSensor())
+	{
+		rectangleBody->typeSensor = typeSensor;
+	}
 
-	
+	return rectangleBody;
 }
 
 //Create Chains
@@ -166,7 +184,7 @@ update_status ModulePhysics::PostUpdate()
 				{
 					b2CircleShape* shape = (b2CircleShape*)f->GetShape();
 					b2Vec2 pos = f->GetBody()->GetPosition();
-					App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
+					App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 255, 0, 0);
 				}
 				break;
 
@@ -200,7 +218,7 @@ update_status ModulePhysics::PostUpdate()
 					for(int32 i = 0; i < shape->m_count; ++i)
 					{
 						v = b->GetWorldPoint(shape->m_vertices[i]);
-						if(i > 0)
+						if(i > 0 && b->IsActive())
 							App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100);
 						prev = v;
 					}
@@ -266,20 +284,43 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 
-
-	if (physA && physA->listener != NULL)
+	if (physA != nullptr)
 	{
-		physA->listener->OnCollision(physA, physB);
+		switch (physA->typeSensor)
+		{
+		case 0:
+			break;
 
-		collisionWithBumper(physA, physB);
+		case 1:
 
+			collisionWithBumper(physA, physB);
+			break;
+
+		case 2:
+
+			App->scene_intro->changeMap = true;
+			break;
+		}
 	}
 
-	if (physB && physB->listener != NULL)
+
+	if (physB != nullptr)
 	{
-		physB->listener->OnCollision(physB, physA);
-		
-		collisionWithBumper(physB, physA);
+		switch (physB->typeSensor)
+		{
+		case 0:
+			break;
+
+		case 1:
+
+			collisionWithBumper(physB, physA);
+			break;
+
+		case 2:
+
+			App->scene_intro->changeMap = true;
+			break;
+		}
 	}
 
 	if (physA && physA->listener != NULL)
