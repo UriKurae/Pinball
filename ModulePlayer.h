@@ -13,6 +13,9 @@ public:
 	update_status Update();
 	bool CleanUp();
 
-public:
+	void addPoint(int points);
+	int getPoints() { return points; };
 
+private:
+	int points;
 };

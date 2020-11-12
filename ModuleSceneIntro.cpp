@@ -7,6 +7,7 @@
 #include "ModulePhysics.h"
 #include "Box2D/Box2D/Box2D.h"
 #include "ModuleAudio.h"
+#include "ModuleFonts.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -33,10 +34,14 @@ bool ModuleSceneIntro::Start()
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
+
+	//Fonts 
+	char lookupTable[] = { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz  0123456789.,ªº?!*$%&()+-/:;<=>@·    " };	
+	yellowFont = App->fonts->Load("pinball/FontY.png", lookupTable, 5);
 	// Creation and setup of the ball. 
 
 	 ball = App->physics->createCircle(454.0f, 731.0f, 13.0f);
-
+	 ball->bodyTag = "Player";
 	 // Creation and setup of the levers
 	 CreateLevers();
 	 MapChain();
@@ -86,11 +91,25 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(triangleLeft, 106, 577,NULL);
 	App->renderer->Blit(triangleRight, 300, 577,NULL);
 
+	App->fonts->BlitText(8, 10, yellowFont, "SCORE:");
+
+	App->fonts->BlitText(200, 10, yellowFont, std::to_string(App->player->getPoints()).c_str());
+
 	return UPDATE_CONTINUE;
 }
 
+
+
 void ModuleSceneIntro::MapChain()
 {
+	//Little Bumpers
+	PhysBody* bumper1 = App->physics->createCircle(198, 189, 13, "SmallBumper",b2BodyType::b2_staticBody);
+	PhysBody* bumper2 = App->physics->createCircle(285, 242, 13, "SmallBumper",b2BodyType::b2_staticBody);
+
+
+	//Big centric bumper
+	App->physics->createCircle(224, 355, 50, "BigBumper", b2BodyType::b2_staticBody);
+
 	// Map outside boundaries
 	// Pivot 0, 0
 	int MapBorder[206] = {
@@ -338,6 +357,8 @@ void ModuleSceneIntro::MapChain()
 	};
 
 	App->physics->createChain(0, 0, wallLeverLeft, 38);
+
+
 
 	// Pivot 0, 0
 	int WallLeverRight[20] = {
@@ -591,4 +612,5 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 	App->audio->PlayFx(bonus_fx);
+
 }

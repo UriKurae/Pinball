@@ -13,6 +13,7 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
+	points = 0;
 	return true;
 }
 
@@ -22,6 +23,11 @@ bool ModulePlayer::CleanUp()
 	LOG("Unloading player");
 
 	return true;
+}
+
+void ModulePlayer::addPoint(int points)
+{
+	this->points += points;
 }
 
 // Update: draw background

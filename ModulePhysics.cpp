@@ -4,7 +4,6 @@
 #include "ModuleRender.h"
 #include "ModulePhysics.h"
 #include "math.h"
-
 //#include "Box2D/Box2D/Box2D.h"
 
 #ifdef _DEBUG
@@ -25,10 +24,10 @@ ModulePhysics::~ModulePhysics()
 }
 
 // Create Circles
-PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad)
+PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad, std::string tag, b2BodyType type)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = type;
 
 	float radius = PIXEL_TO_METERS(rad);
 	body.position.Set(PIXEL_TO_METERS(posX), PIXEL_TO_METERS(posY));
@@ -44,6 +43,7 @@ PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad)
 	b->CreateFixture(&fixture);
 	PhysBody* circleBody = new PhysBody();
 	circleBody->bodyPointer = b;
+	circleBody->bodyTag = tag;
 	b->SetUserData(circleBody);
 	circleBody->height = METERS_TO_PIXELS(radius);
 	circleBody->width = METERS_TO_PIXELS(radius);
@@ -266,9 +266,47 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 
+
 	if (physA && physA->listener != NULL)
+	{
 		physA->listener->OnCollision(physA, physB);
 
+		collisionWithBumper(physA, physB);
+
+	}
+
 	if (physB && physB->listener != NULL)
+	{
 		physB->listener->OnCollision(physB, physA);
+		
+		collisionWithBumper(physB, physA);
+	}
+	
+}
+
+void ModulePhysics::collisionWithBumper(PhysBody* body1, PhysBody* body2)
+{
+	if (body1 != NULL && body2 != NULL)
+	{
+		if (body1->bodyTag != "" && body2->bodyTag != "")
+		{
+			if (body1->bodyTag == "Player" && body2->bodyTag == "SmallBumper")
+			{
+				App->player->addPoint(200);
+			}
+			else if (body2->bodyTag == "Player" && body1->bodyTag == "SmallBumper")
+			{
+				App->player->addPoint(200);
+			}
+			else if (body1->bodyTag == "Player" && body2->bodyTag == "BigBumper")
+			{
+				App->player->addPoint(50);
+			}
+			else if (body2->bodyTag == "Player" && body1->bodyTag == "BigBumper")
+			{
+				App->player->addPoint(50);
+			}
+		}
+	}
+
 }

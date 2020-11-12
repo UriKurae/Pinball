@@ -46,5 +46,7 @@ public:
 	PhysBody* anchorPointB;
 	PhysBody* leverB;
 
+	//Fonts
+	int yellowFont = -1;
 	uint bonus_fx;
 };

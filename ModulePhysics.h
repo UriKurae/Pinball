@@ -2,6 +2,8 @@
 #include "Module.h"
 #include "Globals.h"
 #include "Box2D/Box2D/Box2D.h"
+#include <string>
+#include "ModulePlayer.h"
 
 
 #define GRAVITY_X 0.0f
@@ -31,6 +33,7 @@ public:
 	float width = 0;
 	float height = 0;
 	float rotation = 0;
+	std::string bodyTag;
 
 	b2Vec2 getPosition();
 	double getRotation();
@@ -50,7 +53,7 @@ public:
 	bool CleanUp();
 
 	
-	PhysBody* createCircle(float posX, float posY, float rad);
+	PhysBody* createCircle(float posX, float posY, float rad, std::string bodyTag = "", b2BodyType type = b2BodyType::b2_dynamicBody);
 	PhysBody* createRectangle(float posX, float posY, float width, float height, b2BodyType type = b2BodyType::b2_staticBody);
 	PhysBody* createChain(int x, int y, int* arr, int num, b2BodyType type = b2BodyType::b2_staticBody);
 	b2World* GetWorld();
@@ -62,4 +65,7 @@ private:
 	bool debug;
 	b2World* world;
 	b2ContactListener listener;
+
+	void collisionWithBumper(PhysBody* body1, PhysBody* body2);
+
 };
