@@ -16,6 +16,11 @@ public:
 	void addPoint(int points);
 	int getPoints() { return points; };
 
+	void setStunTime(float time);
+	int getStunTime() { return stunTime; };
+
+
 private:
 	int points;
+	float stunTime;
 };

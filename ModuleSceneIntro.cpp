@@ -33,6 +33,7 @@ bool ModuleSceneIntro::Start()
 	triangleRight = App->textures->Load("pinball/triangleRight.png");
 	rightLeverTexture = App->textures->Load("pinball/palancaDerecha.png");
 	leftLeverTexture = App->textures->Load("pinball/palancaIzquierda.png");
+	canyon = App->textures->Load("pinball/canyon.png");
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
@@ -64,7 +65,7 @@ update_status ModuleSceneIntro::Update()
 {
 	App->renderer->Blit(pinballMap, 0, 0, NULL);
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && launched == false)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN /*&& launched == false*/)
 	{
 		ball->bodyPointer->ApplyForce(b2Vec2(0, -50), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
 		launched = true;
@@ -111,9 +112,24 @@ update_status ModuleSceneIntro::Update()
 	}
 
 
-	App->renderer->Blit(ballTexture, (ball->getPosition().x - ball->width), ball->getPosition().y - ball->width, NULL);
+	if (App->player->getStunTime() <= 0)
+	{
+		App->renderer->Blit(ballTexture, (ball->getPosition().x - ball->width), ball->getPosition().y - ball->width, NULL);
+	}
+	else
+	{
+		App->player->setStunTime(App->player->getStunTime() - 5);
+		if (App->player->getStunTime() < 5.0f)
+		{
+ 			ball->bodyPointer->ApplyForce(b2Vec2(0, -50), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
+		}
+	}
+
+
 	App->renderer->Blit(triangleLeft, 106, 577, NULL);
 	App->renderer->Blit(triangleRight, 300, 577, NULL);
+	App->renderer->Blit(canyon, 28, 695, NULL);
+	App->renderer->Blit(canyon, 392, 695, NULL);
 
 	App->fonts->BlitText(8, 10, yellowFont, "SCORE:");
 
@@ -129,6 +145,10 @@ void ModuleSceneIntro::MapChain()
 	//Little Bumpers
 	PhysBody* bumper1 = App->physics->createCircle(198, 189, 13, "SmallBumper",b2BodyType::b2_staticBody);
 	PhysBody* bumper2 = App->physics->createCircle(285, 242, 13, "SmallBumper",b2BodyType::b2_staticBody);
+	
+	//Little bumpers that hold the ball for some seconds
+	PhysBody* canyon1 = App->physics->createCircle(405, 715, 13.0f,"canyon", b2BodyType::b2_staticBody);
+	PhysBody* canyon2 = App->physics->createCircle(41, 715, 13.0f,"canyon", b2BodyType::b2_staticBody);
 
 
 	//Big centric bumper

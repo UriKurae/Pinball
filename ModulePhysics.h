@@ -67,5 +67,6 @@ private:
 	b2ContactListener listener;
 
 	void collisionWithBumper(PhysBody* body1, PhysBody* body2);
+	void collisionWithCanyon(PhysBody* body1, PhysBody* body2);
 
 };

@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModulePlayer.h"
+#include "ModuleSceneIntro.h"
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -28,6 +29,11 @@ bool ModulePlayer::CleanUp()
 void ModulePlayer::addPoint(int points)
 {
 	this->points += points;
+}
+
+void ModulePlayer::setStunTime(float time)
+{
+	this->stunTime = time;
 }
 
 // Update: draw background

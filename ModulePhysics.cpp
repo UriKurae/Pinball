@@ -281,7 +281,21 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 		
 		collisionWithBumper(physB, physA);
 	}
-	
+
+	if (physA && physA->listener != NULL)
+	{
+		physA->listener->OnCollision(physA, physB);
+
+		collisionWithCanyon(physA, physB);
+
+	}
+
+	if (physB && physB->listener != NULL)
+	{
+		physB->listener->OnCollision(physB, physA);
+
+		collisionWithCanyon(physB, physA);
+	}
 }
 
 void ModulePhysics::collisionWithBumper(PhysBody* body1, PhysBody* body2)
@@ -305,6 +319,29 @@ void ModulePhysics::collisionWithBumper(PhysBody* body1, PhysBody* body2)
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "BigBumper")
 			{
 				App->player->addPoint(50);
+			}
+		}
+	}
+
+}
+
+void ModulePhysics::collisionWithCanyon(PhysBody* body1, PhysBody* body2)
+{
+
+	if (body1 != NULL && body2 != NULL)
+	{
+		if (body1->bodyTag != "" && body2->bodyTag != "")
+		{
+			if (body1->bodyTag == "Player" && body2->bodyTag == "canyon")
+			{
+				App->player->addPoint(200);
+				App->player->setStunTime(1000.0f);
+			}
+			else if (body2->bodyTag == "Player" && body1->bodyTag == "canyon")
+			{
+				App->player->addPoint(200);
+				App->player->setStunTime(1000.0f);
+
 			}
 		}
 	}

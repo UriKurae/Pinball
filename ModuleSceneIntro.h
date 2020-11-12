@@ -5,6 +5,7 @@
 #include "ModulePhysics.h"
 
 class PhysBody;
+class SDL_Texture;
 
 class ModuleSceneIntro : public Module
 {
@@ -30,6 +31,7 @@ public:
 	SDL_Texture* pinballMap;
 	SDL_Texture* rightLeverTexture;
 	SDL_Texture* leftLeverTexture;
+	SDL_Texture* canyon;
 
 	SDL_Texture* triangleLeft;
 	SDL_Texture* triangleRight;
