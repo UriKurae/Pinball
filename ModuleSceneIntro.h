@@ -28,8 +28,8 @@ public:
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	SDL_Texture* pinballMap;
-	SDL_Texture* palancaDerecha;
-	SDL_Texture* palancaIzquierda;
+	SDL_Texture* rightLeverTexture;
+	SDL_Texture* leftLeverTexture;
 
 	SDL_Texture* triangleLeft;
 	SDL_Texture* triangleRight;
@@ -43,10 +43,12 @@ public:
 	b2RevoluteJoint* leverJointA;
 	PhysBody* anchorPointA;
 	PhysBody* leverA;
+	float currentAngleLeverA = 15.0f;
 
 	b2RevoluteJoint* leverJointB;
 	PhysBody* anchorPointB;
 	PhysBody* leverB;
+	float currentAngleLeverB = -15.0f;
 
 	//Fonts
 	int yellowFont = -1;
