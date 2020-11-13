@@ -38,7 +38,8 @@ bool ModuleSceneIntro::Start()
 	bridge = App->textures->Load("pinball/bridge.png");
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-
+	releaseBall = App->audio->LoadFx("pinball/BallRelease.wav");
+	flipper = App->audio->LoadFx("pinball/Flipper.wav");
 
 	//Fonts 
 	char lookupTable[] = { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz  0123456789.,ªº?!*$%&()+-/:;<=>@·    " };	
@@ -101,16 +102,25 @@ update_status ModuleSceneIntro::Update()
 		MapChain();
 		changeMap = false;
 	}
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP){
+		App->audio->PlayFx(releaseBall);
+
+		}
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN /*&& launched == false*/)
 	{
 		ball->bodyPointer->ApplyForce(b2Vec2(0, -50), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
 		launched = true;
 		ball->listener = this;
+
+	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP) {
+		App->audio->PlayFx(flipper);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
+
 		leverJointB->SetMotorSpeed(-20.0f);
 		if (currentAngleLeverB < 60)
 		{
@@ -796,7 +806,7 @@ void ModuleSceneIntro::CreateLevers()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
-	App->audio->PlayFx(bonus_fx);
+//	App->audio->PlayFx(bonus_fx);
 
 }
 

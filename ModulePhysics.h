@@ -67,6 +67,8 @@ private:
 	bool debug;
 	b2World* world;
 	b2ContactListener listener;
+	uint bumpers;
+	uint LooseBall;
 
 	void collisionWithDead(PhysBody* body1, PhysBody* body2);
 	void collisionWithBumper(PhysBody* body1, PhysBody* body2);

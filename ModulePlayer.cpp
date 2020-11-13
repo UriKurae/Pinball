@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModulePlayer.h"
+#include "ModuleAudio.h"
+
 #include "ModuleSceneIntro.h"
 #include "ModuleDeadScene.h"
 
@@ -17,7 +19,10 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 	points = 0;
 	lifes = 3;
+
+
 	return true;
+
 }
 
 // Unload assets
@@ -49,6 +54,7 @@ void ModulePlayer::dead()
 	canPlay = false;
 	App->dead->Enable();
 	App->scene_intro->Disable();
+	App->dead->playSound();
 }
 
 void ModulePlayer::restartGame()

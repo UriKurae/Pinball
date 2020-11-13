@@ -37,5 +37,7 @@ private:
 	int points;
 	int highScore;
 	int lastScore;
+
+
 	float stunTime;
 };

@@ -3,6 +3,8 @@
 #include "ModuleInput.h"
 #include "ModuleRender.h"
 #include "ModulePhysics.h"
+#include "ModuleAudio.h"
+
 #include "ModuleSceneIntro.h"
 #include "math.h"
 //#include "Box2D/Box2D/Box2D.h"
@@ -28,6 +30,7 @@ ModulePhysics::~ModulePhysics()
 // Create Circles
 PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad, int typeSensor, std::string tag, b2BodyType type)
 {
+
 	b2BodyDef body;
 	body.type = type;
 
@@ -149,7 +152,9 @@ bool ModulePhysics::Start()
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 
 	world->SetContactListener(this);
-	
+
+	bumpers= App->audio->LoadFx("pinball/Bumper.wav");
+	LooseBall = App->audio->LoadFx("pinball/LooseBall.wav");
 	return true;
 }
 
@@ -352,11 +357,13 @@ void ModulePhysics::collisionWithDead(PhysBody* body1, PhysBody* body2)
 			if (body1->bodyTag == "Player" && body2->bodyTag == "dead")
 			{
 				App->scene_intro->restartGame();
+				App->audio->PlayFx(LooseBall);
 				//Add sprite
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "dead")
 			{
 				App->scene_intro->restartGame();
+				App->audio->PlayFx(LooseBall);
 				//Add sprite
 			}
 		}
@@ -365,13 +372,19 @@ void ModulePhysics::collisionWithDead(PhysBody* body1, PhysBody* body2)
 
 void ModulePhysics::collisionWithBumper(PhysBody* body1, PhysBody* body2)
 {
+
 	if (body1 != NULL && body2 != NULL)
 	{
 		if (body1->bodyTag != "" && body2->bodyTag != "")
 		{
+			if (body1->bodyTag.find("Bumper") != std::string::npos || body2->bodyTag.find("Bumper") != std::string::npos) {
+				App->audio->PlayFx(bumpers);
+
+			}
 			if (body1->bodyTag == "Player" && body2->bodyTag == "SmallBumper")
 			{
 				App->player->addPoint(50);
+
 				//Add sprite
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "SmallBumper")

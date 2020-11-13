@@ -69,6 +69,8 @@ public:
 	//Fonts
 	int yellowFont = -1;
 	uint bonus_fx;
+	uint releaseBall;
+	uint flipper;
 
 	bool changeMap = false;
 	int mapToDraw = 0;

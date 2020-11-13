@@ -13,6 +13,7 @@ public:
 	ModuleDeadScene(Application* app, bool start_enabled = true);
 	~ModuleDeadScene();
 
+	void playSound();
 	bool Start();
 	update_status Update();
 	bool CleanUp();
@@ -24,5 +25,7 @@ public:
 	//Fonts
 	int yellowFont = -1;
 	int yellowFont2 = -1;
+
+	uint GameOver;
 
 };

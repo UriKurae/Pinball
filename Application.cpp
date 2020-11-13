@@ -19,7 +19,7 @@ Application::Application()
 	window = new ModuleWindow(this);
 	textures = new ModuleTextures(this);
 	input = new ModuleInput(this);
-	audio = new ModuleAudio(this, false);
+	audio = new ModuleAudio(this, true);
 	player = new ModulePlayer(this);
 	scene_intro = new ModuleSceneIntro(this);
 	physics = new ModulePhysics(this);
