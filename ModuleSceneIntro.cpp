@@ -34,6 +34,7 @@ bool ModuleSceneIntro::Start()
 	rightLeverTexture = App->textures->Load("pinball/palancaDerecha.png");
 	leftLeverTexture = App->textures->Load("pinball/palancaIzquierda.png");
 	canyon = App->textures->Load("pinball/canyon.png");
+	bridge = App->textures->Load("pinball/bridge.png");
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
@@ -140,13 +141,34 @@ update_status ModuleSceneIntro::Update()
 	if (App->player->getStunTime() <= 0)
 	{
 		App->renderer->Blit(ballTexture, (ball->getPosition().x - ball->width), ball->getPosition().y - ball->width, NULL);
+		if (mapToDraw == 2)
+		{
+			App->renderer->Blit(bridge, 0, 0, NULL);
+		}
 	}
 	else
 	{
 		App->player->setStunTime(App->player->getStunTime() - 5);
+		ball->bodyPointer->SetActive(false);
 		if (App->player->getStunTime() < 5.0f)
 		{
- 			ball->bodyPointer->ApplyForce(b2Vec2(0, -50), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
+			ball->bodyPointer->SetActive(true);
+			switch (whatBumper)
+			{
+			case 0:
+				break;
+
+			case 1:
+				//Canyon
+				ball->bodyPointer->ApplyForce(b2Vec2(0, -50), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
+				break;
+
+			case 2:
+				//Entrance up-right
+				ball->bodyPointer->ApplyForce(b2Vec2(0, 20), b2Vec2(ball->getPosition().x, ball->getPosition().y), 5);
+				break;
+			}
+			
 		}
 	}
 
@@ -472,100 +494,111 @@ void ModuleSceneIntro::MapChain()
 	};
 
 	// Pivot 0, 0
-	int InteriorWallBridge[186] = {
-		401, 376,
-		411, 354,
-		420, 325,
-		427, 296,
-		434, 258,
-		439, 224,
-		441, 191,
-		441, 150,
-		432, 118,
-		418, 92,
-		398, 70,
-		380, 57,
-		362, 53,
-		367, 67,
-		373, 83,
-		378, 101,
-		381, 109,
-		407, 122,
-		412, 148,
-		405, 166,
-		392, 174,
-		352, 165,
-		344, 152,
-		341, 133,
-		350, 114,
-		347, 96,
-		336, 76,
-		314, 49,
-		278, 33,
-		222, 33,
-		184, 32,
-		157, 34,
-		127, 40,
-		99, 48,
-		73, 61,
-		49, 82,
-		30, 112,
-		21, 143,
-		19, 164,
-		19, 192,
-		21, 220,
-		23, 248,
-		28, 274,
-		32, 298,
-		41, 329,
-		51, 357,
-		60, 378,
-		67, 378,
-		48, 333,
-		35, 285,
-		30, 241,
-		25, 193,
-		24, 162,
-		28, 135,
-		41, 105,
-		59, 81,
-		79, 65,
-		105, 53,
-		140, 44,
-		176, 38,
-		212, 37,
-		259, 38,
-		290, 43,
-		313, 55,
-		324, 68,
-		335, 85,
-		342, 104,
-		340, 122,
-		332, 133,
-		333, 145,
-		336, 163,
-		345, 169,
-		360, 176,
-		374, 177,
-		392, 181,
-		405, 178,
-		414, 168,
-		422, 141,
-		411, 114,
-		384, 102,
-		368, 58,
-		395, 75,
-		410, 90,
-		425, 118,
-		434, 147,
-		435, 190,
-		433, 227,
-		430, 253,
-		424, 287,
-		416, 317,
-		407, 346,
-		396, 367,
-		394, 377
+	int InteriorWallBridge[208] = {
+	401, 376,
+	411, 354,
+	420, 325,
+	427, 296,
+	434, 258,
+	439, 224,
+	441, 191,
+	441, 150,
+	432, 118,
+	418, 92,
+	398, 70,
+	380, 57,
+	362, 53,
+	367, 67,
+	373, 83,
+	378, 101,
+	381, 109,
+	407, 122,
+	412, 148,
+	401, 138,
+	392, 127,
+	368, 125,
+	353, 132,
+	341, 133,
+	350, 114,
+	347, 96,
+	336, 76,
+	314, 49,
+	278, 33,
+	222, 33,
+	184, 32,
+	157, 34,
+	127, 40,
+	99, 48,
+	73, 61,
+	49, 82,
+	30, 112,
+	21, 143,
+	19, 164,
+	19, 192,
+	21, 220,
+	23, 248,
+	28, 274,
+	32, 298,
+	41, 329,
+	51, 357,
+	60, 378,
+	67, 378,
+	48, 333,
+	35, 285,
+	30, 241,
+	25, 193,
+	24, 162,
+	28, 135,
+	41, 105,
+	59, 81,
+	79, 65,
+	105, 53,
+	140, 44,
+	176, 38,
+	212, 37,
+	259, 38,
+	290, 43,
+	313, 55,
+	324, 68,
+	335, 85,
+	342, 104,
+	340, 122,
+	332, 133,
+	335, 160,
+	348, 175,
+	348, 147,
+	365, 135,
+	389, 135,
+	403, 157,
+	392, 185,
+	416, 171,
+	422, 141,
+	411, 114,
+	384, 102,
+	368, 58,
+	395, 75,
+	410, 90,
+	425, 118,
+	434, 147,
+	435, 190,
+	433, 227,
+	430, 253,
+	424, 287,
+	416, 317,
+	407, 346,
+	396, 367,
+	394, 377,
+	394, 377,
+	394, 377,
+	433, 227,
+	430, 253,
+	424, 287,
+	416, 317,
+	407, 346,
+	396, 367,
+	394, 377,
+	394, 377,
+	394, 377
 	};
 
 	// Pivot 0, 0
@@ -608,6 +641,39 @@ void ModuleSceneIntro::MapChain()
 	164, 115
 	};
 
+	int MapBorderRight[22] = {
+	434, 456,
+	438, 441,
+	466, 424,
+	468, 403,
+	457, 386,
+	438, 382,
+	453, 335,
+	462, 300,
+	467, 268,
+	497, 268,
+	510, 415
+	};
+
+	// Pivot 0, 0
+	int InteriorCircle[32] = {
+		394, 102,
+		414, 117,
+		420, 139,
+		391, 184,
+		415, 172,
+		426, 144,
+		420, 116,
+		396, 96,
+		366, 92,
+		346, 104,
+		331, 136,
+		335, 160,
+		348, 176,
+		336, 140,
+		350, 107,
+		368, 98
+	};
 	
 	if (mapToDraw == 0)
 	{
@@ -615,19 +681,27 @@ void ModuleSceneIntro::MapChain()
 		mapPartToChange1 = App->physics->createChain(0, 0, MapBorder, 206);
 		mapPartToChange2 = App->physics->createChain(0, 0, InteriorWallBridge, 186);
 		mapPartToChange3 = App->physics->createChain(0, 0, MapInterior, 216);
+		mapPartToChange4 = App->physics->createChain(0, 0, MapBorderRight, 22);
+		mapPartToChange5 = App->physics->createChain(0, 0, InteriorCircle, 32);
 
 		mapPartToChange3->bodyPointer->SetActive(false);
+		mapPartToChange4->bodyPointer->SetActive(false);
+		mapPartToChange5->bodyPointer->SetActive(false);
 
 		//Little Bumpers
-		PhysBody* bumper1 = App->physics->createCircle(198, 189, 13.0f, 1, "SmallBumper", b2BodyType::b2_staticBody);
-		PhysBody* bumper2 = App->physics->createCircle(285, 242, 13.0f, 1, "SmallBumper", b2BodyType::b2_staticBody);
+		App->physics->createCircle(198, 189, 13.0f, 1, "SmallBumper", b2BodyType::b2_staticBody);
+		App->physics->createCircle(285, 242, 13.0f, 1, "SmallBumper", b2BodyType::b2_staticBody);
+		App->physics->createCircle(439, 416, 2.0f, 1, "lateralBumper", b2BodyType::b2_staticBody);
+		App->physics->createCircle(320, 90, 7.0f, 1, "rightPassage", b2BodyType::b2_staticBody);
+		App->physics->createCircle(243, 65, 13.0f, 1, "upperBumper", b2BodyType::b2_staticBody);
 
 		//Little bumpers that hold the ball for some seconds
-		PhysBody* canyon1 = App->physics->createCircle(405, 715, 13.0f, 0, "canyon", b2BodyType::b2_staticBody);
-		PhysBody* canyon2 = App->physics->createCircle(41, 715, 13.0f, 0, "canyon", b2BodyType::b2_staticBody);
+		App->physics->createCircle(405, 715, 13.0f, 0, "canyon", b2BodyType::b2_staticBody);
+		App->physics->createCircle(41, 715, 13.0f, 0, "canyon", b2BodyType::b2_staticBody);
+		App->physics->createCircle(375, 154, 7.0f, 1, "entryBumper", b2BodyType::b2_staticBody);
 
 		//Big centric bumper
-		App->physics->createCircle(224, 355, 50, 1, "BigBumper", b2BodyType::b2_staticBody);
+		App->physics->createCircle(224, 355, 30, 1, "BigBumper", b2BodyType::b2_staticBody);
 
 		App->physics->createChain(0, 0, wallLeverLeft, 38);
 		App->physics->createChain(0, 0, WallLeverRight, 20);
@@ -636,12 +710,15 @@ void ModuleSceneIntro::MapChain()
 		App->physics->createChain(0, 0, Wall1, 34);
 		App->physics->createChain(0, 0, Wall2, 32);
 
+		//Sensors
 		App->physics->createCircle(25, 340, 7.0f, 2, "sensor", b2BodyType::b2_staticBody);
 		App->physics->createCircle(425, 340, 7.0f, 2, "sensor", b2BodyType::b2_staticBody);
+		App->physics->createCircle(370, 117, 4.0f, 2, "sensor", b2BodyType::b2_staticBody);
 	}
 	if (mapToDraw == 1)
 	{	
 		mapPartToChange3->bodyPointer->SetActive(false);
+		mapPartToChange5->bodyPointer->SetActive(false);
 		mapPartToChange1->bodyPointer->SetActive(true);
 		mapPartToChange2->bodyPointer->SetActive(true);
 	}
@@ -650,6 +727,8 @@ void ModuleSceneIntro::MapChain()
 		mapPartToChange1->bodyPointer->SetActive(false);
 		mapPartToChange2->bodyPointer->SetActive(false);
 		mapPartToChange3->bodyPointer->SetActive(true);
+		mapPartToChange4->bodyPointer->SetActive(true);
+		mapPartToChange5->bodyPointer->SetActive(true);
 	}
 }
 

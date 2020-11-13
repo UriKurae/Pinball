@@ -347,19 +347,67 @@ void ModulePhysics::collisionWithBumper(PhysBody* body1, PhysBody* body2)
 		{
 			if (body1->bodyTag == "Player" && body2->bodyTag == "SmallBumper")
 			{
-				App->player->addPoint(200);
+				App->player->addPoint(50);
+				//Add sprite
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "SmallBumper")
 			{
-				App->player->addPoint(200);
+				App->player->addPoint(50);
+				//Add sprite
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "BigBumper")
 			{
-				App->player->addPoint(50);
+				App->player->addPoint(25);
+				//Add sprite
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "BigBumper")
 			{
-				App->player->addPoint(50);
+				App->player->addPoint(25);
+				//Add sprite
+			}
+			else if (body1->bodyTag == "Player" && body2->bodyTag == "entryBumper")
+			{
+				App->player->addPoint(100);
+				App->player->setStunTime(100.0f);
+				App->scene_intro->whatBumper = 2;
+				//Add sprite
+			}
+			else if (body2->bodyTag == "Player" && body1->bodyTag == "entryBumper")
+			{
+				App->player->addPoint(100);
+				App->player->setStunTime(100.0f);
+				App->scene_intro->whatBumper = 2;
+				//Add sprite
+			}
+			else if (body1->bodyTag == "Player" && body2->bodyTag == "lateralBumper")
+			{
+				App->player->addPoint(300);
+				//Add sprite
+			}
+			else if (body2->bodyTag == "Player" && body1->bodyTag == "lateralBumper")
+			{
+				App->player->addPoint(300);
+				//Add sprite
+			}
+			else if (body1->bodyTag == "Player" && body2->bodyTag == "rightPassage")
+			{
+				App->player->addPoint(150);
+				//Add sprite
+			}
+			else if (body2->bodyTag == "Player" && body1->bodyTag == "rightPassage")
+			{
+				App->player->addPoint(150);
+				//Add sprite
+			}
+			else if (body1->bodyTag == "Player" && body2->bodyTag == "upperBumper")
+			{
+				App->player->addPoint(300);
+				//Add sprite
+			}
+			else if (body2->bodyTag == "Player" && body1->bodyTag == "upperBumper")
+			{
+				App->player->addPoint(300);
+				//Add sprite
 			}
 		}
 	}
@@ -375,13 +423,15 @@ void ModulePhysics::collisionWithCanyon(PhysBody* body1, PhysBody* body2)
 		{
 			if (body1->bodyTag == "Player" && body2->bodyTag == "canyon")
 			{
-				App->player->addPoint(200);
-				App->player->setStunTime(1000.0f);
+				App->player->addPoint(100);
+				App->player->setStunTime(500.0f);
+				App->scene_intro->whatBumper = 1;
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "canyon")
 			{
-				App->player->addPoint(200);
-				App->player->setStunTime(1000.0f);
+				App->player->addPoint(100);
+				App->player->setStunTime(500.0f);
+				App->scene_intro->whatBumper = 1;
 
 			}
 		}

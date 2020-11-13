@@ -35,6 +35,7 @@ public:
 
 	SDL_Texture* triangleLeft;
 	SDL_Texture* triangleRight;
+	SDL_Texture* bridge;
 
 
 	// Player's ball
@@ -55,6 +56,8 @@ public:
 	PhysBody* mapPartToChange1 = nullptr;
 	PhysBody* mapPartToChange2 = nullptr;
 	PhysBody* mapPartToChange3 = nullptr;
+	PhysBody* mapPartToChange4 = nullptr;
+	PhysBody* mapPartToChange5 = nullptr;
 
 	//Fonts
 	int yellowFont = -1;
@@ -62,4 +65,5 @@ public:
 
 	bool changeMap = false;
 	int mapToDraw = 0;
+	int whatBumper = 0;
 };
