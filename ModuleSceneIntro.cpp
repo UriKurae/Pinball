@@ -44,9 +44,11 @@ bool ModuleSceneIntro::Start()
 	char lookupTable[] = { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz  0123456789.,ªº?!*$%&()+-/:;<=>@·    " };	
 	yellowFont = App->fonts->Load("pinball/FontY.png", lookupTable, 5);
 	// Creation and setup of the ball. 
-
-	ball = App->physics->createCircle(initialPos.x,initialPos.y, 13.0f, 0);
+	if (ball == nullptr) {
+		ball = App->physics->createCircle(initialPos.x, initialPos.y, 13.0f, 0);
+	}
 	ball->bodyTag = "Player";
+
 	 // Creation and setup of the levers
 	 CreateLevers();
 	 MapChain();
@@ -77,7 +79,7 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	if (dead == true) {
-		if (ball != nullptr) {
+		if (ball != nullptr && App->player->canPlay) {
 		//	App->physics->GetWorld()->DestroyBody(ball->bodyPointer);
 			ball->bodyPointer->SetLinearVelocity(b2Vec2(0, 0));
 			ball->bodyPointer->SetAngularVelocity(0);
@@ -180,19 +182,26 @@ update_status ModuleSceneIntro::Update()
 			
 		}
 	}
+	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_REPEAT)
+	{
+		App->player->dead();
+	}
 
 	App->renderer->Blit(triangleLeft, 106, 577, NULL);
 	App->renderer->Blit(triangleRight, 300, 577, NULL);
 	App->renderer->Blit(canyon, 28, 695, NULL);
 	App->renderer->Blit(canyon, 392, 695, NULL);
 
-	App->fonts->BlitText(8, 10, yellowFont, "SCORE:");
-	App->fonts->BlitText(8, 50, yellowFont, "LIFES:");
+	App->fonts->BlitText(8, SCREEN_HEIGHT-50, yellowFont, "SCORE:");
+	App->fonts->BlitText(8, SCREEN_HEIGHT -23, yellowFont, "LIFES:");
+	App->fonts->BlitText(200, SCREEN_HEIGHT - 50, yellowFont, "HIGH SCORE:");
+	App->fonts->BlitText(200, SCREEN_HEIGHT - 23, yellowFont, "LAST SCORE:");
 
 
-	App->fonts->BlitText(200, 10, yellowFont, std::to_string(App->player->getPoints()).c_str());
-	App->fonts->BlitText(200, 50, yellowFont, std::to_string(App->player->getLifes()).c_str());
-
+	App->fonts->BlitText(110, SCREEN_HEIGHT-50, yellowFont, std::to_string(App->player->getPoints()).c_str());
+	App->fonts->BlitText(110, SCREEN_HEIGHT - 23, yellowFont, std::to_string(App->player->getLifes()).c_str());
+	App->fonts->BlitText(384, SCREEN_HEIGHT - 50, yellowFont, std::to_string(App->player->getHighScore()).c_str());
+	App->fonts->BlitText(384, SCREEN_HEIGHT - 23, yellowFont, std::to_string(App->player->getLastScore()).c_str());
 
 	
 	return UPDATE_CONTINUE;
@@ -749,36 +758,37 @@ void ModuleSceneIntro::MapChain()
 
 void ModuleSceneIntro::CreateLevers()
 {
-	anchorPointA = App->physics->createRectangle(150, 710, 0.1f, 0.1f, 0);
-	leverA = App->physics->createRectangle(174, 710, 0.65f, 0.1f, 0, b2BodyType::b2_dynamicBody);
-	
-	
-
-	anchorPointB = App->physics->createRectangle(294, 710, 0.1f, 0.1f, 0);
-	leverB = App->physics->createRectangle(270, 710, 0.65f, 0.1f, 0, b2BodyType::b2_dynamicBody);
+	if (anchorPointA == nullptr) {
+		anchorPointA = App->physics->createRectangle(150, 710, 0.1f, 0.1f, 0);
+		leverA = App->physics->createRectangle(174, 710, 0.65f, 0.1f, 0, b2BodyType::b2_dynamicBody);
 
 
-	b2RevoluteJointDef revoluteJointDef;
-	revoluteJointDef.Initialize(leverA->bodyPointer, anchorPointA->bodyPointer, anchorPointA->bodyPointer->GetWorldCenter());
-	revoluteJointDef.collideConnected = false;
-	revoluteJointDef.lowerAngle = DEGTORAD * -20;
-	revoluteJointDef.upperAngle = DEGTORAD * 45;
-	revoluteJointDef.enableLimit = true;
-	revoluteJointDef.maxMotorTorque = 50.0f;
-	revoluteJointDef.motorSpeed = 0.0f;
-	revoluteJointDef.enableMotor = true;
-	leverJointA =(b2RevoluteJoint*) App->physics->GetWorld()->CreateJoint(&revoluteJointDef);
 
-	revoluteJointDef.Initialize(leverB->bodyPointer, anchorPointB->bodyPointer, anchorPointB->bodyPointer->GetWorldCenter());
-	revoluteJointDef.collideConnected = false;
-	revoluteJointDef.lowerAngle = DEGTORAD * -45;
-	revoluteJointDef.upperAngle = DEGTORAD * 20;
-	revoluteJointDef.enableLimit = true;
-	revoluteJointDef.maxMotorTorque = 50.0f;
-	revoluteJointDef.motorSpeed = 0.0f;
-	revoluteJointDef.enableMotor = true;
-	leverJointB = (b2RevoluteJoint*)App->physics->GetWorld()->CreateJoint(&revoluteJointDef);
+		anchorPointB = App->physics->createRectangle(294, 710, 0.1f, 0.1f, 0);
+		leverB = App->physics->createRectangle(270, 710, 0.65f, 0.1f, 0, b2BodyType::b2_dynamicBody);
 
+
+		b2RevoluteJointDef revoluteJointDef;
+		revoluteJointDef.Initialize(leverA->bodyPointer, anchorPointA->bodyPointer, anchorPointA->bodyPointer->GetWorldCenter());
+		revoluteJointDef.collideConnected = false;
+		revoluteJointDef.lowerAngle = DEGTORAD * -20;
+		revoluteJointDef.upperAngle = DEGTORAD * 45;
+		revoluteJointDef.enableLimit = true;
+		revoluteJointDef.maxMotorTorque = 50.0f;
+		revoluteJointDef.motorSpeed = 0.0f;
+		revoluteJointDef.enableMotor = true;
+		leverJointA = (b2RevoluteJoint*)App->physics->GetWorld()->CreateJoint(&revoluteJointDef);
+
+		revoluteJointDef.Initialize(leverB->bodyPointer, anchorPointB->bodyPointer, anchorPointB->bodyPointer->GetWorldCenter());
+		revoluteJointDef.collideConnected = false;
+		revoluteJointDef.lowerAngle = DEGTORAD * -45;
+		revoluteJointDef.upperAngle = DEGTORAD * 20;
+		revoluteJointDef.enableLimit = true;
+		revoluteJointDef.maxMotorTorque = 50.0f;
+		revoluteJointDef.motorSpeed = 0.0f;
+		revoluteJointDef.enableMotor = true;
+		leverJointB = (b2RevoluteJoint*)App->physics->GetWorld()->CreateJoint(&revoluteJointDef);
+	}
 	
 }
 

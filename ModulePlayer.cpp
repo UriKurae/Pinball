@@ -32,14 +32,33 @@ void ModulePlayer::subtractLifes(int lifes)
 {
 	this->lifes -= lifes;
 	if (this->lifes <= 0) {
-		App->dead->Enable();
-		App->scene_intro->Disable();
+		dead();
 	}
 }
 
 void ModulePlayer::addPoint(int points)
 {
 	this->points += points;
+}
+
+void ModulePlayer::dead()
+
+{
+	lastScore = points;
+	highScore = highScore < lastScore ? lastScore : highScore;
+	canPlay = false;
+	App->dead->Enable();
+	App->scene_intro->Disable();
+}
+
+void ModulePlayer::restartGame()
+{
+	canPlay = true;
+	App->scene_intro->Enable();
+	App->dead->Disable();
+	points = 0;
+	lifes = 3;
+
 }
 
 void ModulePlayer::setStunTime(float time)

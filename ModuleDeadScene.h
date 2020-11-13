@@ -23,5 +23,6 @@ public:
 
 	//Fonts
 	int yellowFont = -1;
+	int yellowFont2 = -1;
 
 };
