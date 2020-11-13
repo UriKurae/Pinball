@@ -14,6 +14,9 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	int getLifes() { return lifes; };
+	void subtractLifes(int lifes);
+
 	void addPoint(int points);
 	int getPoints() { return points; };
 
@@ -22,7 +25,7 @@ public:
 
 
 private:
-
+	int lifes;
 	int points;
 	float stunTime;
 };

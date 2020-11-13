@@ -9,6 +9,7 @@
 #include "ModuleAudio.h"
 #include "ModuleFonts.h"
 
+
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	ballTexture = box = rick = NULL;
@@ -44,7 +45,7 @@ bool ModuleSceneIntro::Start()
 	yellowFont = App->fonts->Load("pinball/FontY.png", lookupTable, 5);
 	// Creation and setup of the ball. 
 
-	ball = App->physics->createCircle(454.0f, 731.0f, 13.0f, 0);
+	ball = App->physics->createCircle(initialPos.x,initialPos.y, 13.0f, 0);
 	ball->bodyTag = "Player";
 	 // Creation and setup of the levers
 	 CreateLevers();
@@ -75,18 +76,26 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	if (dead == true) {
+		if (ball != nullptr) {
+		//	App->physics->GetWorld()->DestroyBody(ball->bodyPointer);
+			ball->bodyPointer->SetLinearVelocity(b2Vec2(0, 0));
+			ball->bodyPointer->SetAngularVelocity(0);
+			ball->bodyPointer->SetTransform(b2Vec2(9,14), ball->bodyPointer->GetAngle());
+			changeMap = true;
+			mapPartToChange4->bodyPointer->SetActive(false);
+			App->player->subtractLifes(1);
+			//ball = nullptr;
+		}
+		//ball = App->physics->createCircle(initialPos.x, initialPos.y, 13, 0, "player");
+		dead = false;
+	}
+
 	App->renderer->Blit(pinballMap, 0, 0, NULL);
 
 	if (changeMap)
 	{
-		if (mapToDraw == 1)
-		{
-			mapToDraw = 2;
-		}
-		else if (mapToDraw == 2)
-		{
-			mapToDraw = 1;
-		}
+		mapToDraw = mapToDraw == 1 ? 2 : 1;
 		MapChain();
 		changeMap = false;
 	}
@@ -178,9 +187,14 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(canyon, 392, 695, NULL);
 
 	App->fonts->BlitText(8, 10, yellowFont, "SCORE:");
+	App->fonts->BlitText(8, 50, yellowFont, "LIFES:");
+
 
 	App->fonts->BlitText(200, 10, yellowFont, std::to_string(App->player->getPoints()).c_str());
+	App->fonts->BlitText(200, 50, yellowFont, std::to_string(App->player->getLifes()).c_str());
 
+
+	
 	return UPDATE_CONTINUE;
 }
 
@@ -188,6 +202,7 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::MapChain()
 {	
+	App->physics->createCircle(223, 850, 50, 0, "dead", b2BodyType::b2_staticBody);
 		// Map outside boundaries
 		// Pivot 0, 0
 	int MapBorder[206] = {
@@ -773,4 +788,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	int x, y;
 	App->audio->PlayFx(bonus_fx);
 
+}
+
+void ModuleSceneIntro::restartGame()
+{
+
+	dead = true;
 }

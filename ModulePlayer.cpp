@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModulePlayer.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleDeadScene.h"
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -15,6 +16,7 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 	points = 0;
+	lifes = 3;
 	return true;
 }
 
@@ -24,6 +26,15 @@ bool ModulePlayer::CleanUp()
 	LOG("Unloading player");
 
 	return true;
+}
+
+void ModulePlayer::subtractLifes(int lifes)
+{
+	this->lifes -= lifes;
+	if (this->lifes <= 0) {
+		App->dead->Enable();
+		App->scene_intro->Disable();
+	}
 }
 
 void ModulePlayer::addPoint(int points)

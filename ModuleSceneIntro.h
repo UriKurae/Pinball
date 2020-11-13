@@ -23,6 +23,10 @@ public:
 
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
+	void restartGame();
+
+	bool dead = false;
+
 public:
 
 	SDL_Texture* ballTexture;
@@ -41,6 +45,9 @@ public:
 	// Player's ball
 	PhysBody* ball;
 	bool launched = false;
+
+	//Player's initial position
+	const b2Vec2 initialPos= b2Vec2(454.0f, 731.0f);
 
 	// Player's levers
 	b2RevoluteJoint* leverJointA;

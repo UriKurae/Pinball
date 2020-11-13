@@ -24,6 +24,7 @@ ModulePhysics::~ModulePhysics()
 {
 }
 
+
 // Create Circles
 PhysBody* ModulePhysics::createCircle(float posX, float posY, float rad, int typeSensor, std::string tag, b2BodyType type)
 {
@@ -283,7 +284,6 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 {
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
-
 	if (physA != nullptr)
 	{
 		switch (physA->typeSensor)
@@ -326,6 +326,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	if (physA && physA->listener != NULL)
 	{
 		physA->listener->OnCollision(physA, physB);
+		collisionWithDead(physA, physB);
 
 		collisionWithCanyon(physA, physB);
 
@@ -333,9 +334,32 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if (physB && physB->listener != NULL)
 	{
+		collisionWithDead(physA, physB);
+
 		physB->listener->OnCollision(physB, physA);
 
 		collisionWithCanyon(physB, physA);
+	}
+}
+
+void ModulePhysics::collisionWithDead(PhysBody* body1, PhysBody* body2)
+{
+
+	if (body1 != NULL && body2 != NULL)
+	{
+		if (body1->bodyTag != "" && body2->bodyTag != "")
+		{
+			if (body1->bodyTag == "Player" && body2->bodyTag == "dead")
+			{
+				App->scene_intro->restartGame();
+				//Add sprite
+			}
+			else if (body2->bodyTag == "Player" && body1->bodyTag == "dead")
+			{
+				App->scene_intro->restartGame();
+				//Add sprite
+			}
+		}
 	}
 }
 
@@ -409,6 +433,7 @@ void ModulePhysics::collisionWithBumper(PhysBody* body1, PhysBody* body2)
 				App->player->addPoint(300);
 				//Add sprite
 			}
+
 		}
 	}
 

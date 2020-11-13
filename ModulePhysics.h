@@ -40,6 +40,7 @@ public:
 	b2Vec2 getPosition();
 	double getRotation();
 
+
 	Module* listener;
 };
 
@@ -54,7 +55,6 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	
 	PhysBody* createCircle(float posX, float posY, float rad, int typeSensor, std::string bodyTag = "", b2BodyType type = b2BodyType::b2_dynamicBody);
 	PhysBody* createRectangle(float posX, float posY, float width, float height, int typeSensor, b2BodyType type = b2BodyType::b2_staticBody);
 	PhysBody* createChain(int x, int y, int* arr, int num, b2BodyType type = b2BodyType::b2_staticBody);
@@ -68,6 +68,7 @@ private:
 	b2World* world;
 	b2ContactListener listener;
 
+	void collisionWithDead(PhysBody* body1, PhysBody* body2);
 	void collisionWithBumper(PhysBody* body1, PhysBody* body2);
 	void collisionWithCanyon(PhysBody* body1, PhysBody* body2);
 
