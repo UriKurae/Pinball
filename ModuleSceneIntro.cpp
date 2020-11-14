@@ -53,6 +53,7 @@ bool ModuleSceneIntro::Start()
 		ball = App->physics->createCircle(initialPos.x, initialPos.y, 13.0f, 0);
 	}
 	ball->bodyTag = "Player";
+	ball->listener = this;
 
 	 // Creation and setup of the levers
 	 CreateLevers();
@@ -95,7 +96,7 @@ update_status ModuleSceneIntro::Update()
 			//ball = nullptr;
 		}
 		//ball = App->physics->createCircle(initialPos.x, initialPos.y, 13, 0, "player");
-		dead = false;
+		//dead = false;
 	}
 
 	SDL_Rect rect = map.GetCurrentFrame();
@@ -103,7 +104,16 @@ update_status ModuleSceneIntro::Update()
 
 	if (changeMap)
 	{
+		if (dead == true)
+		{
+			mapToDraw = 1;
+			dead = false;
+		}
+		else
+		{
 		mapToDraw = mapToDraw == 1 ? 2 : 1;
+
+		}
 		MapChain();
 		changeMap = false;
 	}
@@ -116,7 +126,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		ball->bodyPointer->ApplyForce(b2Vec2(0, -50), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
 		launched = true;
-		ball->listener = this;
+		
 
 	}
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP) {

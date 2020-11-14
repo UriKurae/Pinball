@@ -153,6 +153,10 @@ bool ModulePhysics::Start()
 
 	world->SetContactListener(this);
 
+	// needed to create joints like mouse joint
+	b2BodyDef bd;
+	ground = world->CreateBody(&bd);
+
 	bumpers= App->audio->LoadFx("pinball/Bumper.wav");
 	LooseBall = App->audio->LoadFx("pinball/LooseBall.wav");
 	return true;
@@ -249,6 +253,57 @@ update_status ModulePhysics::PostUpdate()
 		}
 	}
 
+
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN && flag == false)
+	{
+		// test if the current body contains mouse position
+
+		pb = new PhysBody();
+
+		pb = App->scene_intro->ball;
+
+		int mx = (App->input->GetMouseX());
+		int my = (App->input->GetMouseY());
+
+		if (pb->Contains(mx, my) == true)
+		{
+
+			mx = PIXEL_TO_METERS(mx);
+			my = PIXEL_TO_METERS(my);
+
+			b2MouseJointDef def;
+			def.bodyA = ground;
+			def.bodyB = pb->bodyPointer;
+			def.target = b2Vec2(mx, my);
+			def.dampingRatio = 0.5f;
+			def.frequencyHz = 2.0f;
+			def.maxForce = 100.0f * pb->bodyPointer->GetMass();
+
+			mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
+			flag = true;
+
+		}
+
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_REPEAT && flag == true)
+	{
+		b2Vec2 target(PIXEL_TO_METERS(App->input->GetMouseX()), PIXEL_TO_METERS(App->input->GetMouseY()));
+		mouse_joint->SetTarget(target);
+
+		b2Vec2 anchor = pb->bodyPointer->GetPosition();
+		anchor.x = METERS_TO_PIXELS(anchor.x);
+		anchor.y = METERS_TO_PIXELS(anchor.y);
+
+		App->renderer->DrawLine((anchor.x), (anchor.y), (App->input->GetMouseX()), (App->input->GetMouseY()), 255, 0, 0);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_UP && flag == true)
+	{
+		world->DestroyJoint(mouse_joint);
+		mouse_joint = nullptr;
+		flag = false;
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -619,4 +674,20 @@ void ModulePhysics::collisionWithCanyon(PhysBody* body1, PhysBody* body2)
 		}
 	}
 
+}
+
+bool PhysBody::Contains(int x, int y) const
+{
+	b2Vec2 p(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	const b2Fixture* fixture = bodyPointer->GetFixtureList();
+
+	while (fixture != NULL)
+	{
+		if (fixture->GetShape()->TestPoint(bodyPointer->GetTransform(), p) == true)
+			return true;
+		fixture = fixture->GetNext();
+	}
+
+	return false;
 }

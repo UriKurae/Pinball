@@ -40,6 +40,9 @@ public:
 	b2Vec2 getPosition();
 	double getRotation();
 
+	bool Contains(int x, int y) const;
+
+
 
 	Module* listener;
 };
@@ -63,6 +66,11 @@ public:
 	void BeginContact(b2Contact* contact);
 
 private:
+	
+	PhysBody* pb;
+	bool flag = false;
+	b2MouseJoint* mouse_joint;
+	b2Body* ground;
 
 	bool debug;
 	b2World* world;
