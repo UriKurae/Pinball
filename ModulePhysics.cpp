@@ -254,7 +254,7 @@ update_status ModulePhysics::PostUpdate()
 	}
 
 
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN && flag == false)
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && flag == false)
 	{
 		// test if the current body contains mouse position
 
@@ -286,7 +286,7 @@ update_status ModulePhysics::PostUpdate()
 
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_REPEAT && flag == true)
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && flag == true)
 	{
 		b2Vec2 target(PIXEL_TO_METERS(App->input->GetMouseX()), PIXEL_TO_METERS(App->input->GetMouseY()));
 		mouse_joint->SetTarget(target);
@@ -298,7 +298,7 @@ update_status ModulePhysics::PostUpdate()
 		App->renderer->DrawLine((anchor.x), (anchor.y), (App->input->GetMouseX()), (App->input->GetMouseY()), 255, 0, 0);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_UP && flag == true)
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && flag == true)
 	{
 		world->DestroyJoint(mouse_joint);
 		mouse_joint = nullptr;
