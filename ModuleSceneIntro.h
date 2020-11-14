@@ -37,12 +37,13 @@ public:
 	SDL_Texture* rightLeverTexture;
 	SDL_Texture* leftLeverTexture;
 	SDL_Texture* canyon;
+	SDL_Texture* spriteSheetBumpers;
 
-	SDL_Texture* triangleLeft;
-	SDL_Texture* triangleRight;
+
 	SDL_Texture* bridge;
 
 	Animation map;
+	Animation monster;
 
 	// Player's ball
 	PhysBody* ball;

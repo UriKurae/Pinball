@@ -19,6 +19,18 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 
 	map.loop = true;
 	map.speed = 0.02f;
+
+	// Monster pushbacks
+	monster.PushBack({ 6,0,101,120 });
+	monster.PushBack({ 118,5,96,115 });
+	monster.PushBack({ 225,16,80,104 });
+	monster.PushBack({ 316,23,96,97 });
+
+	monster.loop = true;
+	monster.speed = 0.03f;
+
+
+
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -34,16 +46,19 @@ bool ModuleSceneIntro::Start()
 
 	pinballMap = App->textures->Load("pinball/Map.png");
 	ballTexture = App->textures->Load("pinball/Ball.png"); 
-	triangleLeft = App->textures->Load("pinball/triangleLeft.png");
-	triangleRight = App->textures->Load("pinball/triangleRight.png");
 	rightLeverTexture = App->textures->Load("pinball/palancaDerecha.png");
 	leftLeverTexture = App->textures->Load("pinball/palancaIzquierda.png");
 	canyon = App->textures->Load("pinball/canyon.png");
 	bridge = App->textures->Load("pinball/bridge.png");
+	spriteSheetBumpers = App->textures->Load("pinball/spriteSheetBumpers.png");
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	releaseBall = App->audio->LoadFx("pinball/BallRelease.wav");
 	flipper = App->audio->LoadFx("pinball/Flipper.wav");
+
+	App->audio->PlayMusic("pinball/SpringValleyMusic.ogg");
+	Mix_VolumeMusic(15);
+	
 
 	//Fonts 
 	char lookupTable[] = { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz  0123456789.,ªº?!*$%&()+-/:;<=>@·    " };	
@@ -60,6 +75,8 @@ bool ModuleSceneIntro::Start()
 	 MapChain();
 	 mapToDraw = 1;
 
+	
+
 	return ret;
 }
 
@@ -69,14 +86,14 @@ bool ModuleSceneIntro::CleanUp()
 	LOG("Unloading Intro scene");
 
 	App->textures->Unload(ballTexture);
-	App->textures->Unload(box);
-	App->textures->Unload(rick);
 	App->textures->Unload(pinballMap);
-	App->textures->Unload(triangleLeft);
-	App->textures->Unload(triangleRight);
 	App->textures->Unload(rightLeverTexture);
 	App->textures->Unload(leftLeverTexture);
 	App->textures->Unload(canyon);
+	App->textures->Unload(spriteSheetBumpers);
+
+	
+	
 
 	return true;
 }
@@ -101,6 +118,8 @@ update_status ModuleSceneIntro::Update()
 
 	SDL_Rect rect = map.GetCurrentFrame();
 	App->renderer->Blit(pinballMap, 0, 0, &rect);
+
+	
 
 	if (changeMap)
 	{
@@ -239,8 +258,6 @@ update_status ModuleSceneIntro::Update()
 		App->player->dead();
 	}
 
-	App->renderer->Blit(triangleLeft, 106, 577, NULL);
-	App->renderer->Blit(triangleRight, 300, 577, NULL);
 	App->renderer->Blit(canyon, 28, 695, NULL);
 	App->renderer->Blit(canyon, 392, 695, NULL);
 
@@ -255,8 +272,13 @@ update_status ModuleSceneIntro::Update()
 	App->fonts->BlitText(384, SCREEN_HEIGHT - 50, yellowFont, std::to_string(App->player->getHighScore()).c_str());
 	App->fonts->BlitText(384, SCREEN_HEIGHT - 23, yellowFont, std::to_string(App->player->getLastScore()).c_str());
 
-	map.Update();
 
+	SDL_Rect monsterRect = monster.GetCurrentFrame();
+	App->renderer->Blit(spriteSheetBumpers, 330, 70, &monsterRect);
+
+
+	map.Update();
+	monster.Update();
 	
 	return UPDATE_CONTINUE;
 }
