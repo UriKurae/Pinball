@@ -3,6 +3,7 @@
 #include "p2List.h"
 #include "Globals.h"
 #include "ModulePhysics.h"
+#include "Animation.h"
 
 class PhysBody;
 class SDL_Texture;
@@ -41,6 +42,7 @@ public:
 	SDL_Texture* triangleRight;
 	SDL_Texture* bridge;
 
+	Animation map;
 
 	// Player's ball
 	PhysBody* ball;

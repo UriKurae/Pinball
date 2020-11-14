@@ -24,7 +24,7 @@ Application::Application()
 	scene_intro = new ModuleSceneIntro(this);
 	physics = new ModulePhysics(this);
 	fonts = new ModuleFonts(this, true);
-	dead = new ModuleDeadScene(this);
+	dead = new ModuleDeadScene(this, false);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -42,7 +42,7 @@ Application::Application()
 	// Scenes
 	AddModule(scene_intro);
 	AddModule(dead);
-	dead->Disable();
+
 	// Player
 	AddModule(player);
 }

@@ -13,6 +13,12 @@
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	ballTexture = box = rick = NULL;
+
+	map.PushBack({ 0,0,476,800 });
+	map.PushBack({ 476,0,476,800 });
+
+	map.loop = true;
+	map.speed = 0.02f;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -26,10 +32,8 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	ballTexture = App->textures->Load("pinball/Ball.png"); 
-	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
 	pinballMap = App->textures->Load("pinball/Map.png");
+	ballTexture = App->textures->Load("pinball/Ball.png"); 
 	triangleLeft = App->textures->Load("pinball/triangleLeft.png");
 	triangleRight = App->textures->Load("pinball/triangleRight.png");
 	rightLeverTexture = App->textures->Load("pinball/palancaDerecha.png");
@@ -94,7 +98,8 @@ update_status ModuleSceneIntro::Update()
 		dead = false;
 	}
 
-	App->renderer->Blit(pinballMap, 0, 0, NULL);
+	SDL_Rect rect = map.GetCurrentFrame();
+	App->renderer->Blit(pinballMap, 0, 0, &rect);
 
 	if (changeMap)
 	{
@@ -186,10 +191,37 @@ update_status ModuleSceneIntro::Update()
 
 			case 2:
 				//Entrance up-right
-				ball->bodyPointer->ApplyForce(b2Vec2(0, 20), b2Vec2(ball->getPosition().x, ball->getPosition().y), 5);
+				ball->bodyPointer->ApplyForce(b2Vec2(0, 50), b2Vec2(ball->getPosition().x, ball->getPosition().y), 5);
 				break;
-			}
-			
+			case 3:
+				//Word Map
+				ball->bodyPointer->ApplyForce(b2Vec2(10, 0), b2Vec2(ball->getPosition().x, ball->getPosition().y), 5);
+				break;
+			case 4:
+				//Boinboing1
+				ball->bodyPointer->ApplyForce(b2Vec2(5, 0), b2Vec2(ball->getPosition().x, ball->getPosition().y), 5);
+				break;
+			case 5:
+				//Boinboing2
+				ball->bodyPointer->ApplyForce(b2Vec2(-5, 0), b2Vec2(ball->getPosition().x, ball->getPosition().y), 5);
+				break;
+			case 6:
+				//Boinboing3
+				ball->bodyPointer->ApplyForce(b2Vec2(5, 5), b2Vec2(ball->getPosition().x, ball->getPosition().y), 5);
+				break;
+			case 7:
+				//Boinboing4
+				ball->bodyPointer->ApplyForce(b2Vec2(-5, 5), b2Vec2(ball->getPosition().x, ball->getPosition().y), 5);
+				break;
+			case 8:
+				//Boinboing5
+				ball->bodyPointer->ApplyForce(b2Vec2(5, -5), b2Vec2(ball->getPosition().x, ball->getPosition().y), 5);
+				break;
+			case 9:
+				//Boinboing6
+				ball->bodyPointer->ApplyForce(b2Vec2(-5, -5), b2Vec2(ball->getPosition().x, ball->getPosition().y), 5);
+				break;
+			}			
 		}
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_REPEAT)
@@ -212,6 +244,8 @@ update_status ModuleSceneIntro::Update()
 	App->fonts->BlitText(110, SCREEN_HEIGHT - 23, yellowFont, std::to_string(App->player->getLifes()).c_str());
 	App->fonts->BlitText(384, SCREEN_HEIGHT - 50, yellowFont, std::to_string(App->player->getHighScore()).c_str());
 	App->fonts->BlitText(384, SCREEN_HEIGHT - 23, yellowFont, std::to_string(App->player->getLastScore()).c_str());
+
+	map.Update();
 
 	
 	return UPDATE_CONTINUE;
@@ -723,19 +757,21 @@ void ModuleSceneIntro::MapChain()
 		mapPartToChange5->bodyPointer->SetActive(false);
 
 		//Little Bumpers
-		App->physics->createCircle(198, 189, 13.0f, 1, "SmallBumper", b2BodyType::b2_staticBody);
-		App->physics->createCircle(285, 242, 13.0f, 1, "SmallBumper", b2BodyType::b2_staticBody);
+		App->physics->createCircle(198, 189, 13.0f, 1, "SmallBumperLeft", b2BodyType::b2_staticBody);
+		App->physics->createCircle(285, 242, 13.0f, 1, "SmallBumperRight", b2BodyType::b2_staticBody);
 		App->physics->createCircle(439, 416, 2.0f, 1, "lateralBumper", b2BodyType::b2_staticBody);
 		App->physics->createCircle(320, 90, 7.0f, 1, "rightPassage", b2BodyType::b2_staticBody);
+		App->physics->createCircle(50, 135, 7.0f, 1, "leftPassage", b2BodyType::b2_staticBody);
 		App->physics->createCircle(243, 65, 13.0f, 1, "upperBumper", b2BodyType::b2_staticBody);
+
+		App->physics->createCircle(43, 458, 7.0f, 1, "wordM", b2BodyType::b2_staticBody);
+		App->physics->createCircle(43, 486, 7.0f, 1, "wordA", b2BodyType::b2_staticBody);
+		App->physics->createCircle(43, 514, 7.0f, 1, "wordP", b2BodyType::b2_staticBody);
 
 		//Little bumpers that hold the ball for some seconds
 		App->physics->createCircle(405, 715, 13.0f, 0, "canyon", b2BodyType::b2_staticBody);
 		App->physics->createCircle(41, 715, 13.0f, 0, "canyon", b2BodyType::b2_staticBody);
-		App->physics->createCircle(375, 154, 7.0f, 1, "entryBumper", b2BodyType::b2_staticBody);
-
-		//Big centric bumper
-		App->physics->createCircle(224, 355, 30, 1, "BigBumper", b2BodyType::b2_staticBody);
+		App->physics->createCircle(375, 154, 3.0f, 1, "entryBumper", b2BodyType::b2_staticBody);
 
 		App->physics->createChain(0, 0, wallLeverLeft, 38);
 		App->physics->createChain(0, 0, WallLeverRight, 20);
@@ -743,6 +779,16 @@ void ModuleSceneIntro::MapChain()
 		App->physics->createChain(0, 0, wallTriangleRight, 42);
 		App->physics->createChain(0, 0, Wall1, 34);
 		App->physics->createChain(0, 0, Wall2, 32);
+
+		//Boing Boing
+		App->physics->createCircle(257, 355, 15.0f, 1, "boingBoing1", b2BodyType::b2_staticBody);
+		App->physics->createCircle(191, 355, 15.0f, 1, "boingBoing2", b2BodyType::b2_staticBody);
+		App->physics->createCircle(241, 388, 15.0f, 1, "boingBoing3", b2BodyType::b2_staticBody);
+		App->physics->createCircle(207, 388, 15.0f, 1, "boingBoing4", b2BodyType::b2_staticBody);
+		App->physics->createCircle(241, 322, 15.0f, 1, "boingBoing5", b2BodyType::b2_staticBody);
+		App->physics->createCircle(207, 322, 15.0f, 1, "boingBoing6", b2BodyType::b2_staticBody);
+
+		App->physics->createCircle(224, 355, 25.0f, 0, "center", b2BodyType::b2_staticBody);
 
 		//Sensors
 		App->physics->createCircle(25, 340, 7.0f, 2, "sensor", b2BodyType::b2_staticBody);
@@ -806,7 +852,7 @@ void ModuleSceneIntro::CreateLevers()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
-//	App->audio->PlayFx(bonus_fx);
+	//App->audio->PlayFx(bonus_fx);
 
 }
 
