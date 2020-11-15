@@ -75,7 +75,9 @@ bool ModuleSceneIntro::Start()
 	 MapChain();
 	 mapToDraw = 1;
 
-	
+	 mapCombo[0] = false;
+	 mapCombo[1] = false;
+	 mapCombo[2] = false;
 
 	return ret;
 }
@@ -110,16 +112,13 @@ update_status ModuleSceneIntro::Update()
 			changeMap = true;
 			mapPartToChange4->bodyPointer->SetActive(false);
 			App->player->subtractLifes(1);
-			//ball = nullptr;
+			whatBumper = 0;
 		}
-		//ball = App->physics->createCircle(initialPos.x, initialPos.y, 13, 0, "player");
 		//dead = false;
 	}
 
 	SDL_Rect rect = map.GetCurrentFrame();
 	App->renderer->Blit(pinballMap, 0, 0, &rect);
-
-	
 
 	if (changeMap)
 	{
@@ -192,6 +191,104 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(leftLeverTexture, 145, 700, NULL, 1.0f, currentAngleLeverA, 11, 10);
 	}
 
+	if (getTimer() > 0)
+	{
+		setTimer(getTimer() - 1);
+	}
+
+	SDL_Rect bumperRect;
+
+	switch (whatBumper)
+	{
+	case 2:
+		bumperRect = { 43,203,23,30 };
+		App->renderer->Blit(spriteSheetBumpers, 347,187, &bumperRect);
+		break;
+	case 10:
+		if (getTimer() > 0)
+		{
+			bumperRect = { 458,221,22,25 };
+			App->renderer->Blit(spriteSheetBumpers, 186, 177, &bumperRect);
+		}
+		bumperRect = { 267,196,44,37 };
+		App->renderer->Blit(spriteSheetBumpers, 175,207, &bumperRect);
+		break;
+	case 11:
+		if (getTimer() > 0)
+		{
+			bumperRect = { 458,221,22,25 };
+			App->renderer->Blit(spriteSheetBumpers, 271, 229, &bumperRect);
+		}
+		break;
+	case 12:
+		if (getTimer() > 0)
+		{
+			bumperRect = { 458,221,22,25 };
+			App->renderer->Blit(spriteSheetBumpers, 231, 55, &bumperRect);
+		}
+		break;
+	case 13:
+		if (getTimer() > 0)
+		{
+			bumperRect = { 458,221,22,25 };
+			App->renderer->Blit(spriteSheetBumpers, 440, 396, &bumperRect);
+		}
+		bumperRect = { 872,206,64,65 };
+		App->renderer->Blit(spriteSheetBumpers, 378, 412, &bumperRect);
+		break;
+	case 14:
+		bumperRect = { 136,140,72,142 };
+		App->renderer->Blit(spriteSheetBumpers, 345, 210, &bumperRect);
+		break;
+	case 15:
+		bumperRect = { 741,160,59,122 };
+		App->renderer->Blit(spriteSheetBumpers, 25, 193, &bumperRect);
+		break;
+	default:
+		break;
+	}
+
+	if (mapCombo[0] == true)
+	{
+		SDL_Rect rect = { 653,176,37,28 };
+		App->renderer->Blit(spriteSheetBumpers, 61, 443, &rect);
+
+	}
+	if (mapCombo[1] == true)
+	{
+		SDL_Rect rect = { 653,206,37,29 };
+		App->renderer->Blit(spriteSheetBumpers, 61, 471, &rect);
+	}
+	if (mapCombo[2] == true)
+	{
+		SDL_Rect rect = { 653,238,37,30 };
+		App->renderer->Blit(spriteSheetBumpers, 61, 502, &rect);
+	}
+
+	if (bumperCombo == 1)
+	{
+		SDL_Rect rect = { 359,230,18,18 };
+		App->renderer->Blit(spriteSheetBumpers, 249, 257, &rect);
+	}
+	else if (bumperCombo == 2)
+	{
+		SDL_Rect rect = { 359,230,18,18 };
+		App->renderer->Blit(spriteSheetBumpers, 249, 257, &rect);
+
+		rect = { 384,237,18,17 };
+		App->renderer->Blit(spriteSheetBumpers, 274, 262, &rect);
+	}
+	else if (bumperCombo == 3)
+	{
+		SDL_Rect rect = { 359,230,18,18 };
+		App->renderer->Blit(spriteSheetBumpers, 249, 257, &rect);
+
+		rect = { 384,237,18,17 };
+		App->renderer->Blit(spriteSheetBumpers, 274, 262, &rect);
+
+		rect = { 408,231,18,18 };
+		App->renderer->Blit(spriteSheetBumpers, 298, 257, &rect);
+	}
 
 	if (App->player->getStunTime() <= 0)
 	{
@@ -250,6 +347,9 @@ update_status ModuleSceneIntro::Update()
 				//Boinboing6
 				ball->bodyPointer->ApplyForce(b2Vec2(-5, -5), b2Vec2(ball->getPosition().x, ball->getPosition().y), 5);
 				break;
+
+			default:
+				break;
 			}			
 		}
 	}
@@ -261,6 +361,9 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(canyon, 28, 695, NULL);
 	App->renderer->Blit(canyon, 392, 695, NULL);
 
+	rect = { 516,200,81,43 };
+	App->renderer->Blit(spriteSheetBumpers, 157,145, &rect);
+
 	App->fonts->BlitText(8, SCREEN_HEIGHT-50, yellowFont, "SCORE:");
 	App->fonts->BlitText(8, SCREEN_HEIGHT -23, yellowFont, "LIFES:");
 	App->fonts->BlitText(200, SCREEN_HEIGHT - 50, yellowFont, "HIGH SCORE:");
@@ -271,11 +374,6 @@ update_status ModuleSceneIntro::Update()
 	App->fonts->BlitText(110, SCREEN_HEIGHT - 23, yellowFont, std::to_string(App->player->getLifes()).c_str());
 	App->fonts->BlitText(384, SCREEN_HEIGHT - 50, yellowFont, std::to_string(App->player->getHighScore()).c_str());
 	App->fonts->BlitText(384, SCREEN_HEIGHT - 23, yellowFont, std::to_string(App->player->getLastScore()).c_str());
-
-
-	SDL_Rect monsterRect = monster.GetCurrentFrame();
-	App->renderer->Blit(spriteSheetBumpers, 330, 70, &monsterRect);
-
 
 	map.Update();
 	monster.Update();
@@ -880,12 +978,58 @@ void ModuleSceneIntro::CreateLevers()
 	
 }
 
+void ModuleSceneIntro::womboCombo(std::string tag)
+{
+	if (tag == "wordM" && mapCombo[0] == false)
+	{
+		App->player->addPoint(100);
+		mapCombo[0] = true;
+	}
+	else if (tag == "wordA" && mapCombo[1] == false)
+	{
+		App->player->addPoint(100);
+		mapCombo[1] = true;
+	}
+	else if (tag == "wordP" && mapCombo[2] == false)
+	{
+		App->player->addPoint(100);
+		mapCombo[2] = true;
+	}
+	
+	if (mapCombo[0] && mapCombo[1] && mapCombo[2])
+	{
+		App->player->addPoint(1000);
+		completeMapCombo = true;
+	}
+
+	if (tag == "SmallBumperRight")
+	{
+		bumperCombo++;
+	}
+
+	if (bumperCombo == 4)
+	{
+		App->player->addPoint(500);
+		bumperCombo = 0;
+	}
+}
+
+void ModuleSceneIntro::restartWomboCombo()
+{
+	mapCombo[0] = false;
+	mapCombo[1] = false;
+	mapCombo[2] = false;
+
+	bumperCombo = 0;
+}
+
+void ModuleSceneIntro::setTimer(float time)
+{
+	this->timer = time;
+}
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	int x, y;
-	//App->audio->PlayFx(bonus_fx);
-
 }
 
 void ModuleSceneIntro::restartGame()

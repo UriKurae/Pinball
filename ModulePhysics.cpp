@@ -439,213 +439,200 @@ void ModulePhysics::collisionWithBumper(PhysBody* body1, PhysBody* body2)
 			if (body1->bodyTag == "Player" && body2->bodyTag == "SmallBumperLeft")
 			{
 				App->player->addPoint(50);
-				//Add sprite
+				App->scene_intro->whatBumper = 10;
+				App->scene_intro->setTimer(60.0f);
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "SmallBumperLeft")
 			{
 				App->player->addPoint(50);
-				//Add sprite
+				App->scene_intro->whatBumper = 10;
+				App->scene_intro->setTimer(60.0f);
 			}
 			if (body1->bodyTag == "Player" && body2->bodyTag == "SmallBumperRight")
 			{
 				App->player->addPoint(50);
-
-				//Add sprite
+				App->scene_intro->womboCombo(body2->bodyTag);
+				App->scene_intro->whatBumper = 11;
+				App->scene_intro->setTimer(60.0f);
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "SmallBumperRight")
 			{
 				App->player->addPoint(50);
-				//Add sprite
+				App->scene_intro->womboCombo(body1->bodyTag);
+				App->scene_intro->whatBumper = 11; 
+				App->scene_intro->setTimer(60.0f);
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "BigBumper")
 			{
 				App->player->addPoint(25);
-				//Add sprite
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "BigBumper")
 			{
 				App->player->addPoint(25);
-				//Add sprite
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "entryBumper")
 			{
 				App->player->addPoint(100);
 				App->player->setStunTime(100.0f);
 				App->scene_intro->whatBumper = 2;
-				//Add sprite
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "entryBumper")
 			{
 				App->player->addPoint(100);
 				App->player->setStunTime(200.0f);
 				App->scene_intro->whatBumper = 2;
-				//Add sprite
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "lateralBumper")
 			{
 				App->player->addPoint(300);
-				//Add sprite
+				App->scene_intro->whatBumper = 13;
+				App->scene_intro->setTimer(60.0f);
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "lateralBumper")
 			{
 				App->player->addPoint(300);
-				//Add sprite
+				App->scene_intro->whatBumper = 13;
+				App->scene_intro->setTimer(60.0f);
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "rightPassage")
 			{
 				App->player->addPoint(150);
-				//Add sprite
+				App->scene_intro->whatBumper = 14;
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "rightPassage")
 			{
 				App->player->addPoint(150);
-				//Add sprite
+				App->scene_intro->whatBumper = 14;
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "leftPassage")
 			{
 				App->player->addPoint(150);
-				//Add sprite
+				App->scene_intro->whatBumper = 15;
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "leftPassage")
 			{
 				App->player->addPoint(150);
-				//Add sprite
+				App->scene_intro->whatBumper = 15;
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "upperBumper")
 			{
 				App->player->addPoint(300);
-				//Add sprite
+				App->scene_intro->whatBumper = 12;
+				App->scene_intro->setTimer(60.0f);
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "upperBumper")
 			{
 				App->player->addPoint(300);
-				//Add sprite
+				App->scene_intro->whatBumper = 12;
+				App->scene_intro->setTimer(60.0f);
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "wordM")
 			{
-				App->player->addPoint(25);
 				App->player->setStunTime(5.0f);
 				App->scene_intro->whatBumper = 3;
-				//Add sprite
+				App->scene_intro->womboCombo(body2->bodyTag);
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "wordM")
 			{
-				App->player->addPoint(25);
 				App->player->setStunTime(5.0f);
 				App->scene_intro->whatBumper = 3;
-				//Add sprite
+				App->scene_intro->womboCombo(body1->bodyTag);
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "wordA")
 			{
-				App->player->addPoint(25);
 				App->player->setStunTime(5.0f);
 				App->scene_intro->whatBumper = 3;
-				//Add sprite
+				App->scene_intro->womboCombo(body2->bodyTag);
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "wordA")
 			{
-				App->player->addPoint(25);
 				App->player->setStunTime(5.0f);
 				App->scene_intro->whatBumper = 3;
-				//Add sprite
+				App->scene_intro->womboCombo(body1->bodyTag);
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "wordP")
 			{
-				App->player->addPoint(25);
 				App->player->setStunTime(5.0f);
 				App->scene_intro->whatBumper = 3;
-				//Add sprite
+				App->scene_intro->womboCombo(body2->bodyTag);
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "wordP")
 			{
-				App->player->addPoint(25);
 				App->player->setStunTime(10.0f);
 				App->scene_intro->whatBumper = 3;
-				//Add sprite
+				App->scene_intro->womboCombo(body1->bodyTag);
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "boingBoing1")
 			{
-			App->player->addPoint(25);
-			App->player->setStunTime(10.0f);
-			App->scene_intro->whatBumper = 4;
-			//Add sprite
+				App->player->addPoint(25);
+				App->player->setStunTime(10.0f);
+				App->scene_intro->whatBumper = 4;
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "boingBoing1")
 			{
-			App->player->addPoint(25);
-			App->player->setStunTime(5.0f);
-			App->scene_intro->whatBumper = 4;
-			//Add sprite
+				App->player->addPoint(25);
+				App->player->setStunTime(5.0f);
+				App->scene_intro->whatBumper = 4;
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "boingBoing2")
 			{
-			App->player->addPoint(25);
-			App->player->setStunTime(10.0f);
-			App->scene_intro->whatBumper = 5;
-			//Add sprite
+				App->player->addPoint(25);
+				App->player->setStunTime(10.0f);
+				App->scene_intro->whatBumper = 5;
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "boingBoing2")
 			{
-			App->player->addPoint(25);
-			App->player->setStunTime(5.0f);
-			App->scene_intro->whatBumper = 5;
-			//Add sprite
+				App->player->addPoint(25);
+				App->player->setStunTime(5.0f);
+				App->scene_intro->whatBumper = 5;
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "boingBoing3")
 			{
-			App->player->addPoint(25);
-			App->player->setStunTime(10.0f);
-			App->scene_intro->whatBumper = 6;
-			//Add sprite
+				App->player->addPoint(25);
+				App->player->setStunTime(10.0f);
+				App->scene_intro->whatBumper = 6;
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "boingBoing3")
 			{
-			App->player->addPoint(25);
-			App->player->setStunTime(5.0f);
-			App->scene_intro->whatBumper = 6;
-			//Add sprite
+				App->player->addPoint(25);
+				App->player->setStunTime(5.0f);
+				App->scene_intro->whatBumper = 6;
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "boingBoing4")
 			{
-			App->player->addPoint(25);
-			App->player->setStunTime(10.0f);
-			App->scene_intro->whatBumper = 7;
-			//Add sprite
+				App->player->addPoint(25);
+				App->player->setStunTime(10.0f);
+				App->scene_intro->whatBumper = 7;
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "boingBoing4")
 			{
-			App->player->addPoint(25);
-			App->player->setStunTime(5.0f);
-			App->scene_intro->whatBumper = 7;
-			//Add sprite
+				App->player->addPoint(25);
+				App->player->setStunTime(5.0f);
+				App->scene_intro->whatBumper = 7;
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "boingBoing5")
 			{
-			App->player->addPoint(25);
-			App->player->setStunTime(10.0f);
-			App->scene_intro->whatBumper = 8;
-			//Add sprite
+				App->player->addPoint(25);
+				App->player->setStunTime(10.0f);
+				App->scene_intro->whatBumper = 8;
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "boingBoing5")
 			{
-			App->player->addPoint(25);
-			App->player->setStunTime(5.0f);
-			App->scene_intro->whatBumper = 8;
-			//Add sprite
+				App->player->addPoint(25);
+				App->player->setStunTime(5.0f);
+				App->scene_intro->whatBumper = 8;
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "boingBoing6")
 			{
-			App->player->addPoint(25);
-			App->player->setStunTime(10.0f);
-			App->scene_intro->whatBumper = 9;
-			//Add sprite
+				App->player->addPoint(25);
+				App->player->setStunTime(10.0f);
+				App->scene_intro->whatBumper = 9;
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "boingBoing6")
 			{
-			App->player->addPoint(25);
-			App->player->setStunTime(5.0f);
-			App->scene_intro->whatBumper = 9;
-			//Add sprite
+				App->player->addPoint(25);
+				App->player->setStunTime(5.0f);
+				App->scene_intro->whatBumper = 9;
 			}
 		}
 	}

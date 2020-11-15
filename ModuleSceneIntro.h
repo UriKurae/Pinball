@@ -26,6 +26,12 @@ public:
 
 	void restartGame();
 
+	void womboCombo(std::string tag);
+	void restartWomboCombo();
+
+	void setTimer(float time);
+	int getTimer() { return timer; };
+
 	bool dead = false;
 
 public:
@@ -78,4 +84,11 @@ public:
 	bool changeMap = false;
 	int mapToDraw = 0;
 	int whatBumper = 0;
+
+	bool mapCombo[3];
+	bool completeMapCombo = false;
+
+	int bumperCombo = 0;
+
+	float timer;
 };
