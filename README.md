@@ -7,6 +7,10 @@ Videogame Pinball for the class Physics II
 The game we have chosen to use as a reference is Game Boy Advance's Sonic Pinball Party. This video shows a longplay for the game itself: https://youtu.be/MTcwG4MDqAw.
 Also here's a link to wikipedia for further information: https://en.wikipedia.org/wiki/Sonic_Pinball_Party.
 
+## Diferences
+
+The main differences between our version of the game and the game itself are mainly the sound effects, since we couldn't find the original sounds.
+
 
 ## Key Features
 
