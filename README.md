@@ -25,7 +25,7 @@ Also here's a link to wikipedia for further information: https://en.wikipedia.or
  ### Debug keys
  
  - F1 shows all collisions included in the game.
- - Left clicking the ball of the player while on collision mode will allow you to grab the ball and move it freely.
+ - Left clicking and holding the ball of the player while on collision mode will allow you to grab the ball and move it freely.
 
 ## Developers and github 
 
