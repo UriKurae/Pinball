@@ -375,6 +375,9 @@ update_status ModuleSceneIntro::Update()
 	App->fonts->BlitText(384, SCREEN_HEIGHT - 50, yellowFont, std::to_string(App->player->getHighScore()).c_str());
 	App->fonts->BlitText(384, SCREEN_HEIGHT - 23, yellowFont, std::to_string(App->player->getLastScore()).c_str());
 
+	SDL_Rect monsterRect = monster.GetCurrentFrame();
+	App->renderer->Blit(spriteSheetBumpers, 330, 70, &monsterRect);
+
 	map.Update();
 	monster.Update();
 	
