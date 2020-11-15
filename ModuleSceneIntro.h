@@ -80,6 +80,7 @@ public:
 	uint bonus_fx;
 	uint releaseBall;
 	uint flipper;
+	uint Cannon;
 
 	bool changeMap = false;
 	int mapToDraw = 0;

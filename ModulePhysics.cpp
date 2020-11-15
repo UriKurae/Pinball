@@ -159,6 +159,8 @@ bool ModulePhysics::Start()
 
 	bumpers= App->audio->LoadFx("pinball/Bumper.wav");
 	LooseBall = App->audio->LoadFx("pinball/LooseBall.wav");
+	Spring= App->audio->LoadFx("pinball/Spring.wav");
+
 	return true;
 }
 
@@ -436,6 +438,10 @@ void ModulePhysics::collisionWithBumper(PhysBody* body1, PhysBody* body2)
 				App->audio->PlayFx(bumpers);
 
 			}
+			if (body1->bodyTag.find("Boing") != std::string::npos || body2->bodyTag.find("Boing") != std::string::npos) {
+				App->audio->PlayFx(Spring);
+
+			}
 			if (body1->bodyTag == "Player" && body2->bodyTag == "SmallBumperLeft")
 			{
 				App->player->addPoint(50);
@@ -656,7 +662,6 @@ void ModulePhysics::collisionWithCanyon(PhysBody* body1, PhysBody* body2)
 				App->player->addPoint(100);
 				App->player->setStunTime(500.0f);
 				App->scene_intro->whatBumper = 1;
-
 			}
 		}
 	}

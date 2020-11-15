@@ -55,6 +55,7 @@ bool ModuleSceneIntro::Start()
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	releaseBall = App->audio->LoadFx("pinball/BallRelease.wav");
 	flipper = App->audio->LoadFx("pinball/Flipper.wav");
+	Cannon = App->audio->LoadFx("pinball/Cannon.wav");
 
 	App->audio->PlayMusic("pinball/SpringValleyMusic.ogg");
 	Mix_VolumeMusic(15);
@@ -313,6 +314,7 @@ update_status ModuleSceneIntro::Update()
 			case 1:
 				//Canyon
 				ball->bodyPointer->ApplyForce(b2Vec2(0, -50), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
+				App->audio->PlayFx(Cannon);
 				break;
 
 			case 2:
