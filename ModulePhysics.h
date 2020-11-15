@@ -78,6 +78,8 @@ private:
 	uint bumpers;
 	uint LooseBall;
 	uint Spring;
+	uint GameOver;
+
 
 	void collisionWithDead(PhysBody* body1, PhysBody* body2);
 	void collisionWithBumper(PhysBody* body1, PhysBody* body2);

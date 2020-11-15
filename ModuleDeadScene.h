@@ -26,6 +26,5 @@ public:
 	int yellowFont = -1;
 	int yellowFont2 = -1;
 
-	uint GameOver;
 
 };

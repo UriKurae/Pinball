@@ -160,6 +160,7 @@ bool ModulePhysics::Start()
 	bumpers= App->audio->LoadFx("pinball/Bumper.wav");
 	LooseBall = App->audio->LoadFx("pinball/LooseBall.wav");
 	Spring= App->audio->LoadFx("pinball/Spring.wav");
+	GameOver = App->audio->LoadFx("pinball/GameOver.wav");
 
 	return true;
 }
@@ -414,14 +415,25 @@ void ModulePhysics::collisionWithDead(PhysBody* body1, PhysBody* body2)
 			if (body1->bodyTag == "Player" && body2->bodyTag == "dead")
 			{
 				App->scene_intro->restartGame();
-				App->audio->PlayFx(LooseBall);
+				if (App->player->getLifes() <= 1) {
+					App->audio->PlayFx(GameOver);
+
+				}
+				else {
+					App->audio->PlayFx(LooseBall);
+				}
 				//Add sprite
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "dead")
 			{
 				App->scene_intro->restartGame();
-				App->audio->PlayFx(LooseBall);
-				//Add sprite
+				if (App->player->getLifes() <= 1) {
+					App->audio->PlayFx(GameOver);
+
+				}
+				else {
+					App->audio->PlayFx(LooseBall);
+				}//Add sprite
 			}
 		}
 	}

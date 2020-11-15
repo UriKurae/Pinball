@@ -24,7 +24,6 @@ ModuleDeadScene::~ModuleDeadScene()
 
 void ModuleDeadScene::playSound()
 {
-	App->audio->PlayFx(GameOver);
 
 }
 
@@ -36,7 +35,6 @@ bool ModuleDeadScene::Start()
 	char lookupTable[] = { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz  0123456789.,ªº?!*$%&()+-/:;<=>@·    " };
 	yellowFont = App->fonts->Load("pinball/FontYred.png", lookupTable, 5);
 	yellowFont2 = App->fonts->Load("pinball/FontY.png", lookupTable, 5);
-	GameOver = App->audio->LoadFx("pinball/GameOver.wav");
 
 	return ret;
 }
