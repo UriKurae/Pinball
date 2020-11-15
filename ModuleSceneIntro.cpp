@@ -56,6 +56,9 @@ bool ModuleSceneIntro::Start()
 	releaseBall = App->audio->LoadFx("pinball/BallRelease.wav");
 	flipper = App->audio->LoadFx("pinball/Flipper.wav");
 	Cannon = App->audio->LoadFx("pinball/Cannon.wav");
+	combo1 = App->audio->LoadFx("pinball/combo1.wav");
+	combo2 = App->audio->LoadFx("pinball/combo2.wav");
+	passage = App->audio->LoadFx("pinball/passage.wav");
 
 	App->audio->PlayMusic("pinball/SpringValleyMusic.ogg");
 	Mix_VolumeMusic(15);
@@ -94,9 +97,7 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(leftLeverTexture);
 	App->textures->Unload(canyon);
 	App->textures->Unload(spriteSheetBumpers);
-
-	
-	
+	App->fonts->UnLoad(yellowFont);
 
 	return true;
 }
@@ -114,6 +115,7 @@ update_status ModuleSceneIntro::Update()
 			mapPartToChange4->bodyPointer->SetActive(false);
 			App->player->subtractLifes(1);
 			whatBumper = 0;
+			launched = false;
 		}
 		//dead = false;
 	}
@@ -136,16 +138,12 @@ update_status ModuleSceneIntro::Update()
 		MapChain();
 		changeMap = false;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP){
-		App->audio->PlayFx(releaseBall);
 
-		}
-
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN /*&& launched == false*/)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && launched == false)
 	{
 		ball->bodyPointer->ApplyForce(b2Vec2(0, -50), b2Vec2(ball->getPosition().x, ball->getPosition().y), 1);
 		launched = true;
-		
+		App->audio->PlayFx(releaseBall);
 
 	}
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP) {
@@ -1001,9 +999,10 @@ void ModuleSceneIntro::womboCombo(std::string tag)
 		mapCombo[2] = true;
 	}
 	
-	if (mapCombo[0] && mapCombo[1] && mapCombo[2])
+	if (mapCombo[0] && mapCombo[1] && mapCombo[2] && completeMapCombo == false)
 	{
 		App->player->addPoint(1000);
+		App->audio->PlayFx(combo2);
 		completeMapCombo = true;
 	}
 
@@ -1016,6 +1015,7 @@ void ModuleSceneIntro::womboCombo(std::string tag)
 	{
 		App->player->addPoint(500);
 		bumperCombo = 0;
+		App->audio->PlayFx(combo1);
 	}
 }
 

@@ -21,12 +21,6 @@ ModuleDeadScene::~ModuleDeadScene()
 
 }
 
-
-void ModuleDeadScene::playSound()
-{
-
-}
-
 bool ModuleDeadScene::Start()
 {
 	bool ret = true;
@@ -67,7 +61,8 @@ bool ModuleDeadScene::CleanUp() {
 
 	bool ret = true;
 
-	
+	App->fonts->UnLoad(yellowFont);
+	App->fonts->UnLoad(yellowFont2);
 
 	return ret;
 }

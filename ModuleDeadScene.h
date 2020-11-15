@@ -13,7 +13,6 @@ public:
 	ModuleDeadScene(Application* app, bool start_enabled = true);
 	~ModuleDeadScene();
 
-	void playSound();
 	bool Start();
 	update_status Update();
 	bool CleanUp();

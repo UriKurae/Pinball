@@ -81,6 +81,9 @@ public:
 	uint releaseBall;
 	uint flipper;
 	uint Cannon;
+	uint combo1;
+	uint combo2;
+	uint passage;
 
 	bool changeMap = false;
 	int mapToDraw = 0;

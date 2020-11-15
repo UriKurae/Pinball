@@ -181,7 +181,7 @@ update_status ModulePhysics::PostUpdate()
 	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 
-	if(!debug)
+	if(debug)
 		return UPDATE_CONTINUE;
 
 	// Bonus code: this will iterate all objects in the world and draw the circles
@@ -516,21 +516,25 @@ void ModulePhysics::collisionWithBumper(PhysBody* body1, PhysBody* body2)
 			{
 				App->player->addPoint(150);
 				App->scene_intro->whatBumper = 14;
+				App->audio->PlayFx(App->scene_intro->passage);
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "rightPassage")
 			{
 				App->player->addPoint(150);
 				App->scene_intro->whatBumper = 14;
+				App->audio->PlayFx(App->scene_intro->passage);
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "leftPassage")
 			{
 				App->player->addPoint(150);
 				App->scene_intro->whatBumper = 15;
+				App->audio->PlayFx(App->scene_intro->passage);
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "leftPassage")
 			{
 				App->player->addPoint(150);
 				App->scene_intro->whatBumper = 15;
+				App->audio->PlayFx(App->scene_intro->passage);
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "upperBumper")
 			{
@@ -549,36 +553,60 @@ void ModulePhysics::collisionWithBumper(PhysBody* body1, PhysBody* body2)
 				App->player->setStunTime(5.0f);
 				App->scene_intro->whatBumper = 3;
 				App->scene_intro->womboCombo(body2->bodyTag);
+				if (App->scene_intro->completeMapCombo == false)
+				{
+					App->audio->PlayFx(bumpers);
+				}
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "wordM")
 			{
 				App->player->setStunTime(5.0f);
 				App->scene_intro->whatBumper = 3;
 				App->scene_intro->womboCombo(body1->bodyTag);
+				if (App->scene_intro->completeMapCombo == false)
+				{
+					App->audio->PlayFx(bumpers);
+				}
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "wordA")
 			{
 				App->player->setStunTime(5.0f);
 				App->scene_intro->whatBumper = 3;
 				App->scene_intro->womboCombo(body2->bodyTag);
+				if (App->scene_intro->completeMapCombo == false)
+				{
+					App->audio->PlayFx(bumpers);
+				}
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "wordA")
 			{
 				App->player->setStunTime(5.0f);
 				App->scene_intro->whatBumper = 3;
 				App->scene_intro->womboCombo(body1->bodyTag);
+				if (App->scene_intro->completeMapCombo == false)
+				{
+					App->audio->PlayFx(bumpers);
+				}
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "wordP")
 			{
 				App->player->setStunTime(5.0f);
 				App->scene_intro->whatBumper = 3;
 				App->scene_intro->womboCombo(body2->bodyTag);
+				if (App->scene_intro->completeMapCombo == false)
+				{
+					App->audio->PlayFx(bumpers);
+				}
 			}
 			else if (body2->bodyTag == "Player" && body1->bodyTag == "wordP")
 			{
 				App->player->setStunTime(10.0f);
 				App->scene_intro->whatBumper = 3;
 				App->scene_intro->womboCombo(body1->bodyTag);
+				if (App->scene_intro->completeMapCombo == false)
+				{
+					App->audio->PlayFx(bumpers);
+				}
 			}
 			else if (body1->bodyTag == "Player" && body2->bodyTag == "boingBoing1")
 			{

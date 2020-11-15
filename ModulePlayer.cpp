@@ -54,7 +54,6 @@ void ModulePlayer::dead()
 	canPlay = false;
 	App->dead->Enable();
 	App->scene_intro->Disable();
-	App->dead->playSound();
 }
 
 void ModulePlayer::restartGame()
