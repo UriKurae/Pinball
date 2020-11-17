@@ -60,7 +60,7 @@ public:
 
 	PhysBody* createCircle(float posX, float posY, float rad, int typeSensor, std::string bodyTag = "", b2BodyType type = b2BodyType::b2_dynamicBody);
 	PhysBody* createRectangle(float posX, float posY, float width, float height, int typeSensor, b2BodyType type = b2BodyType::b2_staticBody);
-	PhysBody* createChain(int x, int y, int* arr, int num, b2BodyType type = b2BodyType::b2_staticBody);
+	PhysBody* createChain(int x, int y, int* arr, int num, b2BodyType type = b2BodyType::b2_staticBody, float restitution = 0.0f);
 	b2World* GetWorld();
 
 	void BeginContact(b2Contact* contact);

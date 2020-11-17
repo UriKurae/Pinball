@@ -908,8 +908,8 @@ void ModuleSceneIntro::MapChain()
 
 		App->physics->createChain(0, 0, wallLeverLeft, 38);
 		App->physics->createChain(0, 0, WallLeverRight, 20);
-		App->physics->createChain(0, 0, wallTriangleLeft, 38);
-		App->physics->createChain(0, 0, wallTriangleRight, 42);
+		App->physics->createChain(0, 0, wallTriangleLeft, 38, b2_staticBody, 2.0f);
+		App->physics->createChain(0, 0, wallTriangleRight, 42, b2_staticBody, 2.0f);
 		App->physics->createChain(0, 0, Wall1, 34);
 		App->physics->createChain(0, 0, Wall2, 32);
 

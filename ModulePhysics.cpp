@@ -106,7 +106,7 @@ PhysBody* ModulePhysics::createRectangle(float posX, float posY, float width, fl
 }
 
 //Create Chains
-PhysBody* ModulePhysics::createChain(int x, int y, int* arr, int num, b2BodyType type)
+PhysBody* ModulePhysics::createChain(int x, int y, int* arr, int num, b2BodyType type, float restitution)
 {
 	b2BodyDef body;
 
@@ -129,6 +129,7 @@ PhysBody* ModulePhysics::createChain(int x, int y, int* arr, int num, b2BodyType
 	shape.CreateLoop(vertix, num / 2);
 
 	b2FixtureDef fixture;
+	fixture.restitution = restitution;
 	fixture.shape = &shape;
 	fixture.density = 1.0;
 
